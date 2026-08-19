@@ -1,0 +1,82 @@
+[
+  {
+    "_id": "d7db4e73-1ec4-4316-8534-0ca51689b33c",
+    "createdAt": "2026-07-20T06:03:01.558Z",
+    "updatedAt": "2026-07-20T06:03:01.558Z",
+    "name": "Apple",
+    "slug": "apple",
+    "description": "Designed in California"
+  },
+  {
+    "_id": "3f82b04a-3fd9-405b-bf22-e1eba155fcda",
+    "createdAt": "2026-07-20T06:03:01.558Z",
+    "updatedAt": "2026-07-20T06:03:01.558Z",
+    "name": "Sony",
+    "slug": "sony",
+    "description": "High definition audio and gaming"
+  },
+  {
+    "_id": "8a6d8db8-4368-4753-8edc-450f46d7397d",
+    "createdAt": "2026-07-20T06:03:01.558Z",
+    "updatedAt": "2026-07-20T06:03:01.558Z",
+    "name": "Samsung",
+    "slug": "samsung",
+    "description": "Excellence in displays and tech"
+  },
+  {
+    "_id": "e94bcaba-1c81-4d49-86fb-39c1cc445edf",
+    "createdAt": "2026-07-20T06:03:01.558Z",
+    "updatedAt": "2026-07-20T06:03:01.558Z",
+    "name": "Asus",
+    "slug": "asus",
+    "description": "Gaming hardware and high-performance notebooks"
+  },
+  {
+    "_id": "aa6fb6d5-46d5-4a89-ac74-9284eaea7e31",
+    "createdAt": "2026-07-20T06:03:01.558Z",
+    "updatedAt": "2026-07-20T06:03:01.558Z",
+    "name": "Bose",
+    "slug": "bose",
+    "description": "Sound reproduction expertise"
+  },
+  {
+    "_id": "68415de5-2b44-47de-80d7-5907cacd96e5",
+    "createdAt": "2026-07-26T07:37:20.898Z",
+    "updatedAt": "2026-07-26T07:37:20.898Z",
+    "name": "Dell",
+    "slug": "dell",
+    "description": "Reliable business and consumer computing"
+  },
+  {
+    "_id": "fbb06835-3450-4043-8d87-96cb30f600cd",
+    "createdAt": "2026-07-26T07:37:20.903Z",
+    "updatedAt": "2026-07-26T07:37:20.903Z",
+    "name": "LG",
+    "slug": "lg",
+    "description": "Life is Good — displays and electronics"
+  },
+  {
+    "_id": "f5295ac5-457a-4488-87ad-7df555f164ca",
+    "createdAt": "2026-07-26T07:37:20.909Z",
+    "updatedAt": "2026-07-26T07:37:20.909Z",
+    "name": "Microsoft",
+    "slug": "microsoft",
+    "description": "Productivity and gaming innovation"
+  },
+  {
+    "_id": "0618e612-3079-4741-8348-af832a5f2058",
+    "createdAt": "2026-07-26T07:37:20.914Z",
+    "updatedAt": "2026-07-26T07:37:20.914Z",
+    "name": "Razer",
+    "slug": "razer",
+    "description": "For gamers, by gamers"
+  },
+  {
+    "_id": "a5d9b37f-c477-474a-b187-ad845a7289a8",
+    "createdAt": "2026-07-26T07:37:20.918Z",
+    "updatedAt": "2026-07-26T07:37:20.918Z",
+    "name": "Google",
+    "slug": "google",
+    "description": "Pure Android experience and AI-first devices"
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "adb45dfc-0112-4d0e-a728-c1ccbddc6c85",
+    "createdAt": "2026-07-21T13:30:49.340Z",
+    "updatedAt": "2026-07-21T13:31:18.503Z",
+    "orderId": "DEV-233389",
+    "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
+    "items": [
+      {
+        "productId": "1a2a3af4-629a-4b94-92ec-66ffa2681553",
+        "name": "Sony WH-1000XM5 Wireless Headphones",
+        "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800",
+        "quantity": 1,
+        "price": 348
+      }
+    ],
+    "shippingAddress": {
+      "_id": "58516f4d-4c71-4d6f-b58e-501caed59aec",
+      "createdAt": "2026-07-21T13:29:59.902Z",
+      "updatedAt": "2026-07-21T13:29:59.902Z",
+      "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
+      "name": "dev",
+      "phone": "1234567890",
+      "street": "kalujhanda,baddi",
+      "city": "baddi",
+      "state": "himachal pradesh",
+      "postalCode": "123445",
+      "country": "india",
+      "isDefault": false
+    },
+    "billingAddress": {
+      "_id": "58516f4d-4c71-4d6f-b58e-501caed59aec",
+      "createdAt": "2026-07-21T13:29:59.902Z",
+      "updatedAt": "2026-07-21T13:29:59.902Z",
+      "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
+      "name": "dev",
+      "phone": "1234567890",
+      "street": "kalujhanda,baddi",
+      "city": "baddi",
+      "state": "himachal pradesh",
+      "postalCode": "123445",
+      "country": "india",
+      "isDefault": false
+    },
+    "paymentMethod": "card",
+    "paymentStatus": "paid",
+    "deliveryStatus": "cancelled",
+    "prices": {
+      "subtotal": 348,
+      "shipping": 0,
+      "tax": 52.2,
+      "discount": 0,
+      "grandTotal": 400.2
+    },
+    "paymentId": "card_tx_6d63bdcf-155",
+    "dates.cancelled": "2026-07-21T13:31:18.502Z"
+  }
+]

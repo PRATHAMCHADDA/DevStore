@@ -1,0 +1,13 @@
+[
+  {
+    "_id": "e0572706-e287-4b4e-be4b-a47f6329d5ef",
+    "createdAt": "2026-07-21T13:28:07.913Z",
+    "updatedAt": "2026-07-21T13:28:07.913Z",
+    "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
+    "userName": "Dev User",
+    "productId": "0a4c5936-4dbd-448d-88fc-a87079e21626",
+    "rating": 5,
+    "comment": "thankyou",
+    "approved": true
+  }
+]

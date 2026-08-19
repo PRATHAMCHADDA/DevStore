@@ -1,0 +1,28 @@
+[
+  {
+    "_id": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
+    "createdAt": "2026-07-21T05:13:10.475Z",
+    "updatedAt": "2026-07-21T05:13:10.475Z",
+    "name": "Dev User",
+    "username": "devuser22",
+    "email": "devuser22@devstore.com",
+    "phone": "8888888888",
+    "password": "$2a$10$JQFV59TrybxDzbnEaap08eBwsWDuCW9oWfTsEkvatoRtwXfyolgbG",
+    "otp": "222321",
+    "otpExpiry": "2026-07-21T05:23:10.472Z",
+    "verified": false
+  },
+  {
+    "_id": "29af9294-607e-44bb-8445-c1c17f1279d8",
+    "createdAt": "2026-07-21T13:41:48.576Z",
+    "updatedAt": "2026-07-21T13:41:48.576Z",
+    "name": "dev",
+    "username": "devuser",
+    "email": "devuser22@gmail.com",
+    "phone": "1234567890",
+    "password": "$2a$10$h7c/ONaITyKBB9VrCouusOcNmBHF5WSO46whheTf1DKtQMQtJ27N6",
+    "otp": "292475",
+    "otpExpiry": "2026-07-21T13:51:48.560Z",
+    "verified": false
+  }
+]

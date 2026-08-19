@@ -1,0 +1,10 @@
+[
+  {
+    "_id": "42203c9b-e92b-4d25-b215-374fcb8cd642",
+    "createdAt": "2026-07-21T13:41:48.594Z",
+    "updatedAt": "2026-07-21T13:41:48.594Z",
+    "userId": "29af9294-607e-44bb-8445-c1c17f1279d8",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI5YWY5Mjk0LTYwN2UtNDRiYi04NDQ1LWMxYzE3ZjEyNzlkOCIsImlhdCI6MTc4NDY0MTMwOCwiZXhwIjoxNzg1MjQ2MTA4fQ.MAI6do1cpaU5iqS3VjGGdrukdj4OkxnNVlpyQGLvVDE",
+    "expiresAt": "2026-07-28T13:41:48.593Z"
+  }
+]

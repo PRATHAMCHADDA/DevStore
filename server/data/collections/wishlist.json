@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "f354760c-9806-434f-ad1c-82dfc5a5aa2a",
+    "createdAt": "2026-07-21T05:13:30.483Z",
+    "updatedAt": "2026-07-21T13:31:31.226Z",
+    "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
+    "products": []
+  },
+  {
+    "_id": "8a3fd6c8-c29c-4bf3-b8f5-e9a13493ba36",
+    "createdAt": "2026-07-21T13:41:53.065Z",
+    "updatedAt": "2026-07-21T13:45:40.813Z",
+    "userId": "29af9294-607e-44bb-8445-c1c17f1279d8",
+    "products": [
+      "ca52e8c9-278f-412c-b131-337a9a7b4f5e",
+      "0947fd63-b786-49f2-849a-3059af503f3d",
+      "1a2a3af4-629a-4b94-92ec-66ffa2681553"
+    ]
+  }
+]

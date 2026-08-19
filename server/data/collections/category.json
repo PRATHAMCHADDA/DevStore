@@ -1,0 +1,47 @@
+[
+  {
+    "_id": "a89c198f-3d3a-4a0c-b99e-0a93372be9c8",
+    "createdAt": "2026-07-20T06:03:01.553Z",
+    "updatedAt": "2026-07-20T06:03:01.555Z",
+    "name": "Computers",
+    "slug": "computers",
+    "description": "Laptops, desktops, and computing powerhouses",
+    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    "_id": "6cc546dd-2b51-43a0-a512-001645b19ab7",
+    "createdAt": "2026-07-20T06:03:01.555Z",
+    "updatedAt": "2026-07-20T06:03:01.555Z",
+    "name": "Audio",
+    "slug": "audio",
+    "description": "Premium headphones, earbuds, and home soundbooks",
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    "_id": "7c368ab1-480c-4aeb-9e74-63f8104299ff",
+    "createdAt": "2026-07-20T06:03:01.555Z",
+    "updatedAt": "2026-07-20T06:03:01.555Z",
+    "name": "Smart Phones",
+    "slug": "smartphones",
+    "description": "Next generation cellular communication and devices",
+    "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    "_id": "c0012ca8-79e6-4ef4-8e18-a26c4ca9fa51",
+    "createdAt": "2026-07-20T06:03:01.555Z",
+    "updatedAt": "2026-07-20T06:03:01.555Z",
+    "name": "Wearables",
+    "slug": "wearables",
+    "description": "Smartwatches, fitness bands, and tracking devices",
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    "_id": "812938bb-9399-4871-ba78-065b02eb1cec",
+    "createdAt": "2026-07-20T06:03:01.555Z",
+    "updatedAt": "2026-07-20T06:03:01.555Z",
+    "name": "Gaming",
+    "slug": "gaming",
+    "description": "Consoles, gaming cards, controllers, and rigs",
+    "image": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&q=80&w=400"
+  }
+]

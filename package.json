@@ -1,0 +1,15 @@
+{
+  "name": "devstore-monorepo",
+  "version": "1.0.0",
+  "description": "DevStore E-Commerce Full Stack Monorepo",
+  "scripts": {
+    "install-all": "npm install --prefix server && npm install --prefix client --legacy-peer-deps",
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "start": "npm run dev"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

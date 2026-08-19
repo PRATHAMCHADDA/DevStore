@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "b59bf9b2-13fc-47f1-b49c-8b4d44dddb24",
+    "createdAt": "2026-07-21T05:13:10.515Z",
+    "updatedAt": "2026-07-21T05:13:10.515Z",
+    "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
+    "title": "Welcome to DevStore!",
+    "message": "Thank you for signing up. Please verify your email with the OTP code sent to you.",
+    "type": "system"
+  },
+  {
+    "_id": "9a49bd5a-f86b-403b-b0eb-d12fa763477a",
+    "createdAt": "2026-07-21T13:30:49.831Z",
+    "updatedAt": "2026-07-21T13:30:49.831Z",
+    "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
+    "title": "Order Placed Successfully!",
+    "message": "Your order #DEV-233389 of $400.2 was confirmed. We are packaging it now.",
+    "type": "order"
+  },
+  {
+    "_id": "069f3b53-5f40-4c0e-963b-329001fd2bf6",
+    "createdAt": "2026-07-21T13:30:49.836Z",
+    "updatedAt": "2026-07-21T13:30:49.836Z",
+    "userId": "admin",
+    "title": "New Order Received",
+    "message": "Order #DEV-233389 has been placed by user for $400.2.",
+    "type": "order"
+  },
+  {
+    "_id": "9e919d61-c94f-4a75-b0fe-de51c81cadbf",
+    "createdAt": "2026-07-21T13:41:48.614Z",
+    "updatedAt": "2026-07-21T13:41:48.614Z",
+    "userId": "29af9294-607e-44bb-8445-c1c17f1279d8",
+    "title": "Welcome to DevStore!",
+    "message": "Thank you for signing up. Please verify your email with the OTP code sent to you.",
+    "type": "system"
+  }
+]
