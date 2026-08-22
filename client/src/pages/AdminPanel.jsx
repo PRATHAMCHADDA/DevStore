@@ -4,7 +4,7 @@ import { useApp } from '../context/AppContext';
 import { 
   LayoutDashboard, Package, Users, ShoppingBag, Tag, 
   TrendingUp, AlertTriangle, Plus, Pencil, Trash2, X, Save,
-  CheckCircle, XCircle
+  CheckCircle, XCircle, ShieldCheck, Lock
 } from 'lucide-react';
 import axios from 'axios';
 import {
@@ -21,11 +21,17 @@ const TABS = [
 ];
 
 export const AdminPanel = () => {
-  const { user, showToast } = useApp();
+  const { user, login, showToast } = useApp();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(false);
+
+  // Dedicated Admin Login State
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminLoginLoading, setAdminLoginLoading] = useState(false);
+  const [adminLoginError, setAdminLoginError] = useState('');
 
   // Stats
   const [stats, setStats] = useState(null);
@@ -45,18 +51,62 @@ export const AdminPanel = () => {
   const [couponModal, setCouponModal] = useState(false);
   const [couponForm, setCouponForm] = useState({ code:'', discountType:'percentage', discountValue:'', minPurchase:'0', expiryDate:'', usageLimit:'100' });
 
-  useEffect(() => {
-    if (!user || user.role !== 'admin') { navigate('/dashboard'); return; }
-    fetchStats();
-  }, []);
+  const userId = user?.id || user?._id;
+  const userRole = user?.role;
 
   useEffect(() => {
+    if (userRole !== 'admin') return;
+
     if (activeTab === 'products') fetchProducts();
     if (activeTab === 'orders') fetchOrders();
     if (activeTab === 'users') fetchUsers();
     if (activeTab === 'coupons') fetchCoupons();
     if (activeTab === 'dashboard') { fetchStats(); fetchAnalytics(); }
-  }, [activeTab]);
+  }, [activeTab, userRole, userId]);
+
+  // Clean background polling every 10 seconds without screen flashing
+  useEffect(() => {
+    if (userRole !== 'admin') return;
+
+    const interval = setInterval(() => {
+      if (activeTab === 'products') fetchProducts();
+      if (activeTab === 'orders') fetchOrders();
+      if (activeTab === 'users') fetchUsers();
+      if (activeTab === 'coupons') fetchCoupons();
+      if (activeTab === 'dashboard') { fetchStats(); fetchAnalytics(); }
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [activeTab, userRole]);
+
+  const handleAdminSignIn = async (e) => {
+    e.preventDefault();
+    if (!adminEmail || !adminPassword) {
+      setAdminLoginError('Please enter both admin email and password.');
+      return;
+    }
+    setAdminLoginLoading(true);
+    setAdminLoginError('');
+    try {
+      const res = await login(adminEmail, adminPassword);
+      setAdminLoginLoading(false);
+      if (!res.success) {
+        setAdminLoginError(res.message || 'Invalid admin credentials.');
+      } else if (res.user?.role !== 'admin') {
+        setAdminLoginError('Access denied: Account does not have administrator privileges.');
+      } else {
+        showToast('Admin Console Unlocked!', 'success');
+      }
+    } catch (err) {
+      setAdminLoginLoading(false);
+      setAdminLoginError('Authentication failed. Please check your credentials.');
+    }
+  };
+
+  const handleFillCredentials = () => {
+    setAdminEmail('admin@devstore.com');
+    setAdminPassword('Admin123!');
+  };
 
   const fetchStats = async () => {
     try { const r = await axios.get('/api/admin/stats'); setStats(r.data); } catch(e){}
@@ -65,22 +115,22 @@ export const AdminPanel = () => {
     try { const r = await axios.get('/api/analytics'); setAnalyticsData(r.data); } catch(e){}
   };
   const fetchProducts = async () => {
-    setLoading(true);
+    if (products.length === 0) setLoading(true);
     try { const r = await axios.get('/api/products?limit=50'); setProducts(r.data.products || []); } catch(e){}
     setLoading(false);
   };
   const fetchOrders = async () => {
-    setLoading(true);
+    if (orders.length === 0) setLoading(true);
     try { const r = await axios.get('/api/admin/orders'); setOrders(r.data); } catch(e){}
     setLoading(false);
   };
   const fetchUsers = async () => {
-    setLoading(true);
+    if (users.length === 0) setLoading(true);
     try { const r = await axios.get('/api/admin/users'); setUsers(r.data); } catch(e){}
     setLoading(false);
   };
   const fetchCoupons = async () => {
-    setLoading(true);
+    if (coupons.length === 0) setLoading(true);
     try { const r = await axios.get('/api/admin/coupons'); setCoupons(r.data); } catch(e){}
     setLoading(false);
   };
@@ -140,6 +190,87 @@ export const AdminPanel = () => {
       </div>
     </div>
   );
+
+  if (!user || user.role !== 'admin') {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 bg-slate-900/90 text-white rounded-3xl my-6 border border-slate-800 shadow-2xl">
+        <div className="max-w-md w-full bg-slate-800/90 backdrop-blur-md rounded-2xl border border-slate-700/80 p-8 shadow-2xl">
+          <div className="flex flex-col items-center text-center mb-8">
+            <div className="w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 shadow-inner">
+              <ShieldCheck className="w-9 h-9" />
+            </div>
+            <h1 className="text-2xl font-black text-white tracking-wide">Enterprise Admin Gateway</h1>
+            <p className="text-xs text-slate-400 mt-1">Restricted Area — Enter your administrator credentials below to log in.</p>
+          </div>
+
+          {adminLoginError && (
+            <div className="mb-6 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              <span>{adminLoginError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleAdminSignIn} className="space-y-5">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">Admin Email</label>
+              <div className="relative">
+                <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-500" />
+                <input
+                  type="email"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  placeholder="Enter your admin email"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">Admin Password</label>
+              <div className="relative">
+                <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-500" />
+                <input
+                  type="password"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  placeholder="Enter your admin password"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                  required
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={adminLoginLoading}
+              className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              {adminLoginLoading ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                'Sign In to Admin Console'
+              )}
+            </button>
+          </form>
+
+          <div className="mt-8 pt-6 border-t border-slate-700/60 text-center">
+            <p className="text-xs text-slate-400">Default Administrator Credentials:</p>
+            <div className="mt-2 text-xs font-mono bg-slate-900/80 p-2.5 rounded-xl border border-slate-700 text-slate-300 flex items-center justify-between">
+              <span>admin@devstore.com / Admin123!</span>
+              <button
+                onClick={handleFillCredentials}
+                type="button"
+                className="text-[10px] text-blue-400 hover:text-blue-300 font-sans font-bold bg-blue-500/10 px-2 py-1 rounded"
+              >
+                Auto-fill
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -316,26 +447,20 @@ export const AdminPanel = () => {
           {/* ─ Users ─ */}
           {activeTab === 'users' && (
             <div className="space-y-5">
-              <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">Users ({users.length})</h2>
+              <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">Registered Users ({users.length})</h2>
               {loading ? <div className="h-64 skeleton rounded-3xl"></div> : (
                 <div className="glass rounded-3xl border border-slate-200/50 dark:border-slate-800/80 overflow-hidden">
                   <table className="w-full text-xs">
                     <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
-                      <tr>{['Name','Email','Role','Toggle Role'].map(h => <th key={h} className="px-4 py-3 text-left text-[10px] font-extrabold text-slate-400 uppercase">{h}</th>)}</tr>
+                      <tr>{['Name','Email','Role'].map(h => <th key={h} className="px-4 py-3 text-left text-[10px] font-extrabold text-slate-400 uppercase">{h}</th>)}</tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
                       {users.map(u => (
-                        <tr key={u._id || u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
-                          <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">{u.name}</td>
+                        <tr key={u._id || u.id || u.email} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+                          <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">{u.name || u.username || 'User'}</td>
                           <td className="px-4 py-3 text-slate-500">{u.email}</td>
                           <td className="px-4 py-3">
-                            <span className={`text-[9px] px-2 py-1 rounded font-extrabold uppercase ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-600'}`}>{u.role}</span>
-                          </td>
-                          <td className="px-4 py-3">
-                            <button onClick={() => handleUserRole(u._id || u.id, u.role === 'admin' ? 'customer' : 'admin')}
-                              className="text-[10px] font-bold text-blue-500 hover:underline border-0 bg-transparent cursor-pointer">
-                              {u.role === 'admin' ? 'Demote' : 'Make Admin'}
-                            </button>
+                            <span className={`text-[9px] px-2.5 py-1 rounded-full font-extrabold uppercase tracking-wider ${u.role === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{u.role}</span>
                           </td>
                         </tr>
                       ))}

@@ -1,8 +1,9 @@
 import { verifyAccessToken } from '../utils/jwt.js';
+import { User } from '../models/index.js';
 
-export const requireAuth = (req, res, next) => {
+export const requireAuth = async (req, res, next) => {
   // Read token from header or cookie
-  let token = req.cookies.accessToken;
+  let token = req.cookies?.accessToken;
 
   if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
     token = req.headers.authorization.split(' ')[1];
@@ -17,7 +18,25 @@ export const requireAuth = (req, res, next) => {
     return res.status(401).json({ message: 'Session expired or token invalid. Please re-authenticate.' });
   }
 
-  req.user = decoded;
+  try {
+    const dbUser = await User.findById(decoded.id);
+    if (dbUser) {
+      req.user = {
+        id: dbUser._id,
+        _id: dbUser._id,
+        role: dbUser.role || 'user',
+        email: dbUser.email,
+        name: dbUser.name
+      };
+    } else {
+      req.user = decoded;
+      if (!req.user.role) req.user.role = 'user';
+    }
+  } catch (err) {
+    req.user = decoded;
+    if (!req.user.role) req.user.role = 'user';
+  }
+
   next();
 };
 

@@ -65,10 +65,12 @@ class JsonCollection {
 
       // Handle logic operators $or, $and
       if (key === '$or' && Array.isArray(filterValue)) {
-        return filterValue.some(subFilter => this._matches(doc, subFilter));
+        if (!filterValue.some(subFilter => this._matches(doc, subFilter))) return false;
+        continue;
       }
       if (key === '$and' && Array.isArray(filterValue)) {
-        return filterValue.every(subFilter => this._matches(doc, subFilter));
+        if (!filterValue.every(subFilter => this._matches(doc, subFilter))) return false;
+        continue;
       }
 
       // Standard fields mapping
@@ -141,7 +143,8 @@ class JsonCollection {
   async findById(id) {
     if (!id) return null;
     const list = this._read();
-    return list.find(item => item._id === id.toString() || item.id === id) || null;
+    const idStr = id.toString();
+    return list.find(item => item._id === idStr || item.id === idStr || item._id === id || item.id === id) || null;
   }
 
   async create(data) {
@@ -171,8 +174,10 @@ class JsonCollection {
   }
 
   async findByIdAndUpdate(id, update, options = { new: true }) {
+    if (!id) return null;
     const list = this._read();
-    const idx = list.findIndex(item => item._id === id.toString());
+    const idStr = id.toString();
+    const idx = list.findIndex(item => item._id === idStr || item.id === idStr || item._id === id || item.id === id);
     if (idx === -1) return null;
 
     // Handle Mongoose-like atomic operators or plain object updates

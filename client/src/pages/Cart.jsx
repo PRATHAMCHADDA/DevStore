@@ -69,7 +69,7 @@ export const Cart = () => {
     });
   };
 
-  if (cartLoading && (!cart.items || cart.items.length === 0)) {
+  if (cartLoading && (!cart || !cart.items || cart.items.length === 0)) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-20 space-y-8">
         <h1 className="text-3xl font-extrabold text-slate-800 dark:text-white">Shopping Cart</h1>
@@ -78,7 +78,7 @@ export const Cart = () => {
     );
   }
 
-  const items = cart.items || [];
+  const items = cart?.items || [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

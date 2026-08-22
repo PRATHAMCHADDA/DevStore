@@ -52,16 +52,27 @@ export const AppProvider = ({ children }) => {
   const checkAuth = async () => {
     setAuthLoading(true);
     try {
-      const res = await axios.get('/api/auth/profile');
-      if (res.data && res.data.user) {
-        setUser(res.data.user);
-        // Load cart & wishlist from server
+      const res = await axios.get('/api/auth/me');
+      const userData = res.data?.user || res.data;
+      if (userData && (userData._id || userData.id || userData.email)) {
+        setUser(userData);
         loadCart();
         loadWishlist();
       }
     } catch (err) {
-      // Ignore 401 logs on startup
-      setUser(null);
+      try {
+        const res = await axios.get('/api/auth/profile');
+        const userData = res.data?.user || res.data;
+        if (userData && (userData._id || userData.id || userData.email)) {
+          setUser(userData);
+          loadCart();
+          loadWishlist();
+        } else {
+          setUser(null);
+        }
+      } catch (e) {
+        setUser(null);
+      }
     } finally {
       setAuthLoading(false);
     }
@@ -74,7 +85,7 @@ export const AppProvider = ({ children }) => {
   // --- Axios Interceptors for Token Renewal ---
   useEffect(() => {
     // Routes that should NEVER trigger a refresh retry (to avoid infinite loops)
-    const noRetryUrls = ['/api/auth/refresh', '/api/auth/profile', '/api/auth/login', '/api/auth/logout'];
+    const noRetryUrls = ['/api/auth/refresh', '/api/auth/profile', '/api/auth/me', '/api/auth/login', '/api/auth/logout'];
 
     let isRefreshing = false;
     let refreshSubscribers = [];
@@ -239,16 +250,18 @@ export const AppProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await axios.post('/api/auth/login', { email, password });
-      setUser(res.data.user);
-      showToast(res.data.message || 'Welcome back!');
+      const userData = res.data?.user || res.data;
+      setUser(userData);
+      showToast(res.data?.message || 'Welcome back!');
       // Load user cart and wishlist
       loadCart();
       loadWishlist();
-      return { success: true };
+      return { success: true, user: userData };
     } catch (err) {
+      setUser(null);
       return {
         success: false,
-        message: err.response?.data?.message || 'Login failed. Please verify credentials.'
+        message: err.response?.data?.message || 'Invalid email or password.'
       };
     }
   };
@@ -256,12 +269,9 @@ export const AppProvider = ({ children }) => {
   const register = async (name, username, email, phone, password, confirmPassword) => {
     try {
       const res = await axios.post('/api/auth/register', { name, username, email, phone, password, confirmPassword });
-      setUser(res.data.user);
-      showToast('Registration successful! Verification code sent to email.');
-      // Empty local cart
-      setCart({ items: [] });
-      setWishlist({ products: [] });
-      return { success: true };
+      const userData = res.data?.user || res.data;
+      showToast('Signed up successfully');
+      return { success: true, user: userData };
     } catch (err) {
       const errors = err.response?.data?.errors;
       const errMsg = errors ? errors.map(e => e.msg).join(' ') : (err.response?.data?.message || 'Registration failed.');
@@ -282,8 +292,8 @@ export const AppProvider = ({ children }) => {
   };
 
   // --- Totals Computations ---
-  const cartSubtotal = (cart.items || []).reduce((sum, item) => sum + (item.discountedPrice * item.quantity), 0);
-  const cartTotalQty = (cart.items || []).reduce((sum, item) => sum + item.quantity, 0);
+  const cartSubtotal = (cart?.items || []).reduce((sum, item) => sum + ((item?.discountedPrice ?? item?.price ?? 0) * (item?.quantity || 1)), 0);
+  const cartTotalQty = (cart?.items || []).reduce((sum, item) => sum + (item?.quantity || 0), 0);
 
   return (
     <AppContext.Provider value={{

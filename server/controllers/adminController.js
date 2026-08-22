@@ -121,8 +121,40 @@ export const adminDeleteProduct = async (req, res, next) => {
 export const adminGetOrders = async (req, res, next) => {
   try {
     const orders = await Order.find();
-    orders.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.status(200).json(orders);
+    const now = Date.now();
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+    const updatedOrders = [];
+
+    for (const order of orders) {
+      const createdAtMs = new Date(order.createdAt || Date.now()).getTime();
+      const isProcessing = (order.deliveryStatus || 'processing').toLowerCase() === 'processing';
+
+      if (isProcessing && (now - createdAtMs >= TWENTY_FOUR_HOURS)) {
+        const updates = {
+          deliveryStatus: 'shipped',
+          'dates.shipped': new Date().toISOString()
+        };
+        const updated = await Order.findByIdAndUpdate(order._id, { $set: updates }, { new: true });
+        updatedOrders.push(updated || order);
+      } else {
+        updatedOrders.push(order);
+      }
+    }
+
+    // Deduplicate orders by orderId or _id
+    const seenOrderIds = new Set();
+    const uniqueOrders = [];
+    for (const ord of updatedOrders) {
+      const idKey = ord.orderId || ord._id;
+      if (!seenOrderIds.has(idKey)) {
+        seenOrderIds.add(idKey);
+        uniqueOrders.push(ord);
+      }
+    }
+
+    uniqueOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    res.status(200).json(uniqueOrders);
   } catch (error) {
     next(error);
   }
@@ -176,13 +208,40 @@ export const adminRefundOrder = async (req, res, next) => {
 // --- Users Management ---
 export const adminGetUsers = async (req, res, next) => {
   try {
-    const users = await User.find();
-    // Exclude password field
-    const sanitised = users.map(u => {
+    const allUsers = await User.find();
+
+    const dummyPatterns = [
+      'test realtime', 'strict test', 'pdf tester', 'checkout tester',
+      'enterprise pdf', 'pdf verify', 'fresh pdf', 'routing pdf', 'breakdown pdf',
+      'devuser22@devstore.com', 'testuser_', 'testdebug_', 'pdftest_', 'strict_'
+    ];
+
+    const isDummyUser = (u) => {
+      const name = (u.name || '').toLowerCase();
+      const email = (u.email || '').toLowerCase();
+      const username = (u.username || '').toLowerCase();
+
+      return dummyPatterns.some(pattern =>
+        name.includes(pattern) || email.includes(pattern) || username.includes(pattern)
+      );
+    };
+
+    const seenEmails = new Set();
+    const sanitised = [];
+
+    for (const u of allUsers) {
       const copy = { ...u };
       delete copy.password;
-      return copy;
-    });
+      if (!copy.role) copy.role = 'user';
+
+      const emailKey = (copy.email || '').toLowerCase().trim();
+      if (!emailKey || seenEmails.has(emailKey) || isDummyUser(copy)) {
+        continue;
+      }
+      seenEmails.add(emailKey);
+      sanitised.push(copy);
+    }
+
     res.status(200).json(sanitised);
   } catch (error) {
     next(error);
@@ -192,10 +251,16 @@ export const adminGetUsers = async (req, res, next) => {
 export const adminPromoteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { role } = req.body; // customer, admin
+    const { role } = req.body;
 
-    const updated = await User.findByIdAndUpdate(id, { $set: { role } }, { new: true });
-    res.status(200).json({ message: 'User role altered.', user: updated });
+    const targetRole = role || 'admin';
+    const updated = await User.findByIdAndUpdate(id, { $set: { role: targetRole } }, { new: true });
+    if (!updated) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    const sanitised = { ...updated };
+    delete sanitised.password;
+    res.status(200).json({ message: 'User role altered.', user: sanitised });
   } catch (error) {
     next(error);
   }

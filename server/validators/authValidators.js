@@ -4,10 +4,10 @@ export const registerValidator = [
   body('name').trim().notEmpty().withMessage('Full name is required.'),
   body('username').trim().isLength({ min: 3 }).withMessage('Username must be at least 3 characters long.'),
   body('email').trim().isEmail().withMessage('Must be a valid email address.').normalizeEmail(),
-  body('phone').optional().trim().isMobilePhone().withMessage('Must be a valid phone number.'),
+  body('phone').optional({ checkFalsy: true }).trim(),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.'),
-  body('confirmPassword').custom((value, { req }) => {
-    if (value !== req.body.password) {
+  body('confirmPassword').optional({ checkFalsy: true }).custom((value, { req }) => {
+    if (value && value !== req.body.password) {
       throw new Error('Passwords do not match.');
     }
     return true;
@@ -15,7 +15,7 @@ export const registerValidator = [
 ];
 
 export const loginValidator = [
-  body('email').trim().isEmail().withMessage('Must be a valid email address.').normalizeEmail(),
+  body('email').trim().notEmpty().withMessage('Email or username is required.'),
   body('password').notEmpty().withMessage('Password is required.')
 ];
 

@@ -28,6 +28,7 @@ router.post('/forgot-password', requestPasswordReset);
 router.post('/reset-password', resetPassword);
 
 router.get('/profile', requireAuth, getProfile);
+router.get('/me', requireAuth, getProfile);
 router.put('/profile', requireAuth, updateProfile);
 
 export default router;

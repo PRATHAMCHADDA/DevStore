@@ -24,7 +24,7 @@
   {
     "_id": "1a2a3af4-629a-4b94-92ec-66ffa2681553",
     "createdAt": "2026-07-20T06:03:01.561Z",
-    "updatedAt": "2026-07-21T13:31:18.501Z",
+    "updatedAt": "2026-08-22T18:59:24.120Z",
     "name": "Sony WH-1000XM5 Wireless Headphones",
     "slug": "sony-wh-1000xm5-headphones",
     "description": "Industry-leading noise canceling wireless overhead headphones with two processors controlling 8 microphones, Auto NC Optimizer, and hands-free calling. Features spectacular sound quality and up to 30 hours of continuous wireless playback on a single charge.",
@@ -43,7 +43,7 @@
     "isTrending": false,
     "isTodayDeal": true,
     "$inc": {
-      "stock": 1
+      "stock": -1
     }
   },
   {
@@ -93,7 +93,7 @@
   {
     "_id": "99b0f199-8126-4d51-b850-e7c1878b60bc",
     "createdAt": "2026-07-20T06:03:01.561Z",
-    "updatedAt": "2026-07-20T06:03:01.561Z",
+    "updatedAt": "2026-08-22T18:59:24.156Z",
     "name": "Bose QuietComfort Ultra Wireless Earbuds",
     "slug": "bose-quietcomfort-ultra-earbuds",
     "description": "Exceptional noise cancellation engineered with immersive audio features. CustomTune technology shapes the ANC configuration precisely to your ears, ensuring deep resonant music reproduction.",
@@ -110,7 +110,10 @@
     "reviewsCount": 22,
     "isFeatured": false,
     "isTrending": true,
-    "isTodayDeal": true
+    "isTodayDeal": true,
+    "$inc": {
+      "stock": -1
+    }
   },
   {
     "_id": "ca52e8c9-278f-412c-b131-337a9a7b4f5e",
@@ -159,7 +162,7 @@
   {
     "_id": "eb3a4c1d-52cf-4415-909f-76a366352fb8",
     "createdAt": "2026-07-26T07:37:20.798Z",
-    "updatedAt": "2026-07-26T07:37:20.800Z",
+    "updatedAt": "2026-08-22T18:59:24.189Z",
     "name": "Dell XPS 15 OLED - Core i9 13900H",
     "slug": "dell-xps-15-oled-i9",
     "description": "Dell's flagship 15\" creator laptop featuring a stunning 3.5K OLED HDR display, Intel Core i9-13900H, NVIDIA GeForce RTX 4070, 32GB DDR5 RAM, and a 1TB NVMe SSD. An absolute powerhouse for video editing, 3D rendering, and demanding workloads — all wrapped in a sleek CNC-machined aluminium chassis.",
@@ -176,7 +179,10 @@
     "reviewsCount": 29,
     "isFeatured": true,
     "isTrending": false,
-    "isTodayDeal": true
+    "isTodayDeal": true,
+    "$inc": {
+      "stock": -1
+    }
   },
   {
     "_id": "498051b6-edb8-4c8c-a6d2-579ce82087f2",
@@ -247,7 +253,7 @@
   {
     "_id": "12840aba-4936-48f8-b9e2-a13d7060137c",
     "createdAt": "2026-07-26T07:37:20.837Z",
-    "updatedAt": "2026-07-26T07:37:20.837Z",
+    "updatedAt": "2026-08-22T18:59:24.229Z",
     "name": "Google Pixel 9 Pro XL 256GB",
     "slug": "google-pixel-9-pro-xl-256gb",
     "description": "Powered by Google Tensor G4, the Pixel 9 Pro XL redefines AI-first photography. A triple camera system with 50MP main, 5x optical zoom, 6.8\" LTPO Super Actua display, and exclusive Google AI features including Magic Eraser, Photo Unblur, and Best Take for the perfect shot every time.",
@@ -264,7 +270,10 @@
     "reviewsCount": 41,
     "isFeatured": false,
     "isTrending": true,
-    "isTodayDeal": true
+    "isTodayDeal": true,
+    "$inc": {
+      "stock": -1
+    }
   },
   {
     "_id": "23ec07f1-cb31-415c-8fc7-2f8e02e61cd5",
@@ -313,7 +322,7 @@
   {
     "_id": "7b4ce050-294b-4599-ae36-575e966cce58",
     "createdAt": "2026-07-26T07:37:20.859Z",
-    "updatedAt": "2026-07-26T07:37:20.859Z",
+    "updatedAt": "2026-08-22T18:13:24.324Z",
     "name": "LG TONE Free T90S Earbuds with UVnano",
     "slug": "lg-tone-free-t90s-earbuds",
     "description": "Premium true wireless earbuds featuring Meridian-tuned audio, Active Noise Cancellation, and the unique UVnano charging case that uses UV-C LED light to sanitize each earbud while charging. Dolby Head Tracking provides a theater-like spatial audio experience wherever you go.",
@@ -330,12 +339,15 @@
     "reviewsCount": 26,
     "isFeatured": false,
     "isTrending": false,
-    "isTodayDeal": true
+    "isTodayDeal": true,
+    "$inc": {
+      "stock": -1
+    }
   },
   {
     "_id": "485676a9-7066-4781-9bfd-a9a90476aa29",
     "createdAt": "2026-07-26T07:37:20.867Z",
-    "updatedAt": "2026-07-26T07:37:20.867Z",
+    "updatedAt": "2026-08-22T18:13:24.259Z",
     "name": "Samsung Galaxy Watch 7 Classic 47mm",
     "slug": "samsung-galaxy-watch-7-classic-47mm",
     "description": "The iconic rotating bezel returns on the Galaxy Watch 7 Classic. Packed with advanced health sensors including BioActive Sensor for body composition, ECG, blood pressure monitoring, and sleep coaching powered by Google's Wear OS. A sapphire crystal glass display and 47mm stainless steel case ensure lasting durability.",
@@ -352,12 +364,15 @@
     "reviewsCount": 38,
     "isFeatured": true,
     "isTrending": true,
-    "isTodayDeal": false
+    "isTodayDeal": false,
+    "$inc": {
+      "stock": -1
+    }
   },
   {
     "_id": "8d678f37-12b1-4be2-9f89-8030352cd200",
     "createdAt": "2026-07-26T07:37:20.873Z",
-    "updatedAt": "2026-07-26T07:37:20.873Z",
+    "updatedAt": "2026-08-22T18:13:24.356Z",
     "name": "Google Pixel Watch 3 45mm LTE",
     "slug": "google-pixel-watch-3-45mm-lte",
     "description": "The Pixel Watch 3 is Google's most capable smartwatch yet. With a large 45mm always-on AMOLED display, Fitbit-powered health tracking, emergency SOS, Loss of Pulse Detection, and seamless Google ecosystem integration. Built with recycled aluminium and a Gorilla Glass 5 lens for premium durability.",
@@ -374,12 +389,15 @@
     "reviewsCount": 19,
     "isFeatured": false,
     "isTrending": true,
-    "isTodayDeal": false
+    "isTodayDeal": false,
+    "$inc": {
+      "stock": -1
+    }
   },
   {
     "_id": "a7567c3e-eed8-4c4e-b02f-d29c453d981c",
     "createdAt": "2026-07-26T07:37:20.879Z",
-    "updatedAt": "2026-07-26T07:37:20.879Z",
+    "updatedAt": "2026-08-22T18:13:24.288Z",
     "name": "Razer BlackShark V2 Pro Wireless Headset",
     "slug": "razer-blackshark-v2-pro-wireless",
     "description": "Esports-grade wireless audio engineered with THX Spatial Audio for 360° directional precision. Features Razer's TriForce Titanium 50mm drivers tuned to separate highs, mids, and lows, HyperClear Super Wideband Mic for crystal clear voice chat, and up to 70 hours of battery life.",
@@ -396,12 +414,15 @@
     "reviewsCount": 55,
     "isFeatured": false,
     "isTrending": true,
-    "isTodayDeal": true
+    "isTodayDeal": true,
+    "$inc": {
+      "stock": -1
+    }
   },
   {
     "_id": "d1d5b54f-5b15-4a40-842c-d523d5af3e58",
     "createdAt": "2026-07-26T07:37:20.885Z",
-    "updatedAt": "2026-07-26T07:37:20.885Z",
+    "updatedAt": "2026-08-22T18:13:24.224Z",
     "name": "Asus ROG Ally X Gaming Handheld",
     "slug": "asus-rog-ally-x-gaming-handheld",
     "description": "The ultimate Windows 11 gaming handheld with AMD Ryzen Z1 Extreme processor, a buttery-smooth 120Hz 7\" FHD display, 24GB LPDDR5X RAM, 1TB SSD, and an upgraded 80Wh battery for all-day gaming sessions. Play your entire PC gaming library — Steam, Xbox Game Pass, Epic — on the go.",
@@ -418,12 +439,15 @@
     "reviewsCount": 43,
     "isFeatured": true,
     "isTrending": true,
-    "isTodayDeal": false
+    "isTodayDeal": false,
+    "$inc": {
+      "stock": -1
+    }
   },
   {
     "_id": "05419fe0-7db4-4cfd-a000-a5ed1df3f890",
     "createdAt": "2026-07-26T07:37:20.891Z",
-    "updatedAt": "2026-07-26T07:37:20.891Z",
+    "updatedAt": "2026-08-22T18:28:10.155Z",
     "name": "Microsoft Xbox Series X 1TB Console",
     "slug": "microsoft-xbox-series-x-1tb",
     "description": "The most powerful Xbox ever. Delivering true 4K gaming at up to 120 FPS with ray-tracing, powered by a 12 teraflop GPU and custom NVMe SSD for near-instant load times. Xbox Game Pass Ultimate gives you access to hundreds of games on day one, including all first-party titles from Microsoft Studios.",
@@ -440,6 +464,9 @@
     "reviewsCount": 102,
     "isFeatured": true,
     "isTrending": false,
-    "isTodayDeal": false
+    "isTodayDeal": false,
+    "$inc": {
+      "stock": -2
+    }
   }
 ]

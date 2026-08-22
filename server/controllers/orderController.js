@@ -1,6 +1,12 @@
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { Order, Product, Cart, Coupon, Notification, Invoice } from '../models/index.js';
 import { executePayment } from '../services/paymentService.js';
 import { generateInvoicePDF } from '../services/invoiceService.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Mail Simulation Helper
 const sendSimulatedEmail = (to, subject, html) => {
@@ -182,9 +188,28 @@ export const placeOrder = async (req, res, next) => {
 export const getOrderHistory = async (req, res, next) => {
   try {
     const orders = await Order.find({ userId: req.user.id });
-    // Sort manually
-    orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.status(200).json(orders);
+    const now = Date.now();
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+    const updatedOrders = [];
+    for (const order of orders) {
+      const createdAtMs = new Date(order.createdAt || Date.now()).getTime();
+      const isProcessing = (order.deliveryStatus || 'processing').toLowerCase() === 'processing';
+
+      if (isProcessing && (now - createdAtMs >= TWENTY_FOUR_HOURS)) {
+        const updates = {
+          deliveryStatus: 'shipped',
+          'dates.shipped': new Date().toISOString()
+        };
+        const updated = await Order.findByIdAndUpdate(order._id, { $set: updates }, { new: true });
+        updatedOrders.push(updated || order);
+      } else {
+        updatedOrders.push(order);
+      }
+    }
+
+    updatedOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    res.status(200).json(updatedOrders);
   } catch (error) {
     next(error);
   }
@@ -199,6 +224,20 @@ export const getOrderById = async (req, res, next) => {
 
     if (order.userId !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Access denied.' });
+    }
+
+    const now = Date.now();
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+    const createdAtMs = new Date(order.createdAt || Date.now()).getTime();
+    const isProcessing = (order.deliveryStatus || 'processing').toLowerCase() === 'processing';
+
+    if (isProcessing && (now - createdAtMs >= TWENTY_FOUR_HOURS)) {
+      const updates = {
+        deliveryStatus: 'shipped',
+        'dates.shipped': new Date().toISOString()
+      };
+      const updated = await Order.findByIdAndUpdate(order._id, { $set: updates }, { new: true });
+      return res.status(200).json(updated || order);
     }
 
     res.status(200).json(order);
@@ -280,22 +319,41 @@ export const requestOrderReturn = async (req, res, next) => {
 export const downloadInvoiceFile = async (req, res, next) => {
   try {
     const { orderId } = req.params;
-    const invoice = await Invoice.findOne({ orderId });
-    
-    if (!invoice) {
-       // Search order and try auto-recreating if missing
-       const order = await Order.findById(orderId);
-       if (order) {
-         const newPath = await generateInvoicePDF(order);
-         const fullFilePath = path.join(process.cwd(), newPath);
-         return res.sendFile(fullFilePath);
-       }
-       return res.status(404).json({ message: 'Invoice not found. Generate order first.' });
+
+    // Search order by orderId or _id in Mongoose / Sequelize
+    let order = await Order.findOne({ orderId });
+    if (!order && Order.findOne) {
+      try { order = await Order.findOne({ where: { orderId } }); } catch (e) {}
+    }
+    if (!order && Order.findById) {
+      try { order = await Order.findById(orderId); } catch (e) {}
     }
 
-    const fullFilePath = path.join(process.cwd(), invoice.pdfPath);
-    res.sendFile(fullFilePath);
-  } catch (error) {
-    next(error);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found.' });
+    }
+
+    // Call the updated invoice service generator
+    const relativePdfPath = await generateInvoicePDF(order);
+
+    const fileName = `invoice_${order.orderId}.pdf`;
+    const candidatePaths = [
+      path.resolve(process.cwd(), relativePdfPath.startsWith('/') ? relativePdfPath.slice(1) : relativePdfPath),
+      path.resolve(process.cwd(), 'server', relativePdfPath.startsWith('/') ? relativePdfPath.slice(1) : relativePdfPath),
+      path.resolve(__dirname, '../uploads/invoices', fileName)
+    ];
+
+    const absolutePath = candidatePaths.find(p => fs.existsSync(p));
+
+    if (!absolutePath || !fs.existsSync(absolutePath)) {
+      return res.status(404).json({ message: 'Invoice PDF file not found.' });
+    }
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="invoice_${order.orderId}.pdf"`);
+    return res.sendFile(absolutePath);
+  } catch (err) {
+    console.error('Invoice controller error:', err);
+    return res.status(500).json({ message: 'Error generating invoice', error: err.message });
   }
 };

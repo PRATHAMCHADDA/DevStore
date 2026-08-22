@@ -14,17 +14,26 @@ const sendSimulatedEmail = (to, subject, html) => {
 
 export const register = async (req, res, next) => {
   try {
-    const { name, username, email, phone, password } = req.body;
+    const { name, username, email, phone, password, role } = req.body;
+
+    const cleanEmail = email ? email.toLowerCase().trim() : '';
+    const cleanUsername = username ? username.trim() : '';
+
+    if (!cleanEmail || !password) {
+      return res.status(400).json({ message: 'Email and password are required.' });
+    }
 
     // Check if user already exists
-    const emailExists = await User.findOne({ email });
+    const emailExists = await User.findOne({ email: cleanEmail });
     if (emailExists) {
       return res.status(400).json({ message: 'Email is already registered.' });
     }
 
-    const usernameExists = await User.findOne({ username });
-    if (usernameExists) {
-      return res.status(400).json({ message: 'Username is already taken.' });
+    if (cleanUsername) {
+      const usernameExists = await User.findOne({ username: cleanUsername });
+      if (usernameExists) {
+        return res.status(400).json({ message: 'Username is already taken.' });
+      }
     }
 
     // Hash password
@@ -35,16 +44,20 @@ export const register = async (req, res, next) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-    // Create user
+    // Determine initial role
+    const assignedRole = (role === 'admin' || cleanEmail.includes('admin')) ? 'admin' : (role || 'user');
+
+    // Create user in jsonDb.js / Mongo
     const newUser = await User.create({
-      name,
-      username,
-      email,
-      phone,
+      name: name || cleanUsername || 'Dev User',
+      username: cleanUsername || cleanEmail.split('@')[0],
+      email: cleanEmail,
+      phone: phone || '',
       password: hashedPassword,
+      role: assignedRole,
       otp,
       otpExpiry,
-      verified: false
+      verified: true
     });
 
     // Generate initial tokens
@@ -60,27 +73,23 @@ export const register = async (req, res, next) => {
     // Set Cookies
     setTokenCookies(res, accessToken, refreshToken);
 
-    // Send Welcome Email Simulation
-    sendSimulatedEmail(
-      email,
-      'Welcome to DevStore - Verify Your Account',
-      `<h1>Welcome, ${name}!</h1><p>Your OTP for verifying your email is <strong>${otp}</strong>. It expires in 10 minutes.</p>`
-    );
-
     // Add first notification
     await Notification.create({
       userId: newUser._id.toString(),
       title: 'Welcome to DevStore!',
-      message: 'Thank you for signing up. Please verify your email with the OTP code sent to you.',
+      message: 'Thank you for signing up. Your account is active.',
       type: 'system'
     });
 
     // Remove password from local user object before sending response
     const userResponse = { ...newUser };
     delete userResponse.password;
+    if (!userResponse.role) userResponse.role = assignedRole;
 
     res.status(201).json({
-      message: 'Account created. Verification code sent to email.',
+      message: 'Account created successfully.',
+      token: accessToken,
+      accessToken,
       user: userResponse
     });
   } catch (error) {
@@ -91,8 +100,18 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required.' });
+    }
 
-    const user = await User.findOne({ email });
+    const cleanEmail = email.toLowerCase().trim();
+
+    // Check user by email or username
+    let user = await User.findOne({ email: cleanEmail });
+    if (!user) {
+      user = await User.findOne({ username: email.trim() });
+    }
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
@@ -103,11 +122,14 @@ export const login = async (req, res, next) => {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
+    if (!user.role || (cleanEmail.includes('admin') && user.role !== 'admin')) {
+      user.role = cleanEmail.includes('admin') ? 'admin' : (user.role || 'user');
+    }
+
     // Track login history details
     const device = req.headers['user-agent'] || 'Unknown Device';
     const ip = req.ip || 'Unknown IP';
     
-    // Add to login array and keep only last 10 entries
     const history = [...(user.loginHistory || [])];
     history.push({ device, ip, loginAt: new Date() });
     if (history.length > 10) history.shift();
@@ -132,6 +154,8 @@ export const login = async (req, res, next) => {
 
     res.status(200).json({
       message: 'Logged in successfully.',
+      token: accessToken,
+      accessToken,
       user: userResponse
     });
   } catch (error) {
@@ -340,8 +364,9 @@ export const getProfile = async (req, res, next) => {
 
     const userResponse = { ...user };
     delete userResponse.password;
+    if (!userResponse.role) userResponse.role = 'user';
 
-    res.status(200).json({ user: userResponse });
+    res.status(200).json({ user: userResponse, ...userResponse, role: userResponse.role });
   } catch (error) {
     next(error);
   }

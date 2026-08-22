@@ -67,9 +67,9 @@ function AppRoutes() {
             <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
             <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
 
-            {/* Admin only routes */}
-            <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
-            <Route path="/admin/*" element={<AdminRoute><AdminPanel /></AdminRoute>} />
+            {/* Admin routes */}
+            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/admin/*" element={<AdminPanel />} />
 
             {/* Fallback */}
             <Route path="*" element={

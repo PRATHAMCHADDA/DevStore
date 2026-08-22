@@ -1,10 +1,10 @@
 [
   {
-    "_id": "adb45dfc-0112-4d0e-a728-c1ccbddc6c85",
-    "createdAt": "2026-07-21T13:30:49.340Z",
-    "updatedAt": "2026-07-21T13:31:18.503Z",
-    "orderId": "DEV-233389",
-    "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
+    "_id": "2372f7b4-9aa6-4b80-9f53-f2d84a276d50",
+    "createdAt": "2026-08-22T18:59:24.086Z",
+    "updatedAt": "2026-08-22T18:59:24.119Z",
+    "orderId": "DEV-193990",
+    "userId": "admin-super-id-001",
     "items": [
       {
         "productId": "1a2a3af4-629a-4b94-92ec-66ffa2681553",
@@ -12,47 +12,67 @@
         "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800",
         "quantity": 1,
         "price": 348
+      },
+      {
+        "productId": "99b0f199-8126-4d51-b850-e7c1878b60bc",
+        "name": "Bose QuietComfort Ultra Wireless Earbuds",
+        "image": "https://images.unsplash.com/photo-1608156639585-b3a032ef9689?auto=format&fit=crop&q=80&w=800",
+        "quantity": 1,
+        "price": 249
+      },
+      {
+        "productId": "eb3a4c1d-52cf-4415-909f-76a366352fb8",
+        "name": "Dell XPS 15 OLED - Core i9 13900H",
+        "image": "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&q=80&w=800",
+        "quantity": 1,
+        "price": 2199
+      },
+      {
+        "productId": "12840aba-4936-48f8-b9e2-a13d7060137c",
+        "name": "Google Pixel 9 Pro XL 256GB",
+        "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&q=80&w=800",
+        "quantity": 1,
+        "price": 999
       }
     ],
     "shippingAddress": {
-      "_id": "58516f4d-4c71-4d6f-b58e-501caed59aec",
-      "createdAt": "2026-07-21T13:29:59.902Z",
-      "updatedAt": "2026-07-21T13:29:59.902Z",
-      "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
-      "name": "dev",
-      "phone": "1234567890",
-      "street": "kalujhanda,baddi",
-      "city": "baddi",
-      "state": "himachal pradesh",
-      "postalCode": "123445",
-      "country": "india",
+      "_id": "f38ac2e1-5a3e-43ff-b7a1-81efa51ed879",
+      "createdAt": "2026-08-22T18:59:18.420Z",
+      "updatedAt": "2026-08-22T18:59:18.420Z",
+      "userId": "admin-super-id-001",
+      "name": "pratham",
+      "phone": "7894554987",
+      "street": "Chimeny Road",
+      "city": "Ludhiana",
+      "state": "Punjab",
+      "postalCode": "141003",
+      "country": "India",
       "isDefault": false
     },
     "billingAddress": {
-      "_id": "58516f4d-4c71-4d6f-b58e-501caed59aec",
-      "createdAt": "2026-07-21T13:29:59.902Z",
-      "updatedAt": "2026-07-21T13:29:59.902Z",
-      "userId": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
-      "name": "dev",
-      "phone": "1234567890",
-      "street": "kalujhanda,baddi",
-      "city": "baddi",
-      "state": "himachal pradesh",
-      "postalCode": "123445",
-      "country": "india",
+      "_id": "f38ac2e1-5a3e-43ff-b7a1-81efa51ed879",
+      "createdAt": "2026-08-22T18:59:18.420Z",
+      "updatedAt": "2026-08-22T18:59:18.420Z",
+      "userId": "admin-super-id-001",
+      "name": "pratham",
+      "phone": "7894554987",
+      "street": "Chimeny Road",
+      "city": "Ludhiana",
+      "state": "Punjab",
+      "postalCode": "141003",
+      "country": "India",
       "isDefault": false
     },
-    "paymentMethod": "card",
+    "paymentMethod": "cod",
     "paymentStatus": "paid",
-    "deliveryStatus": "cancelled",
+    "deliveryStatus": "processing",
     "prices": {
-      "subtotal": 348,
+      "subtotal": 3795,
       "shipping": 0,
-      "tax": 52.2,
+      "tax": 569.25,
       "discount": 0,
-      "grandTotal": 400.2
+      "grandTotal": 4364.25
     },
-    "paymentId": "card_tx_6d63bdcf-155",
-    "dates.cancelled": "2026-07-21T13:31:18.502Z"
+    "paymentId": "cod_tx_DEV-193990"
   }
 ]

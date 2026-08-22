@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "_id": "3c5ffddf-6516-4776-9eb5-ab3957fe43de",
+    "createdAt": "2026-08-22T17:46:22.629Z",
+    "updatedAt": "2026-08-22T17:46:22.629Z",
+    "userId": "d197183d-31b1-4951-bee9-c7fbad5fdd88",
+    "name": "pratham",
+    "phone": "7854878547",
+    "street": "chitjkara univ.",
+    "city": "baddi",
+    "state": "HM",
+    "postalCode": "174103",
+    "country": "India",
+    "isDefault": false
+  },
+  {
+    "_id": "a8e143e8-ad14-4819-987a-97d166d8c260",
+    "createdAt": "2026-08-22T18:06:00.932Z",
+    "updatedAt": "2026-08-22T18:06:00.932Z",
+    "userId": "ec4cdcc2-f1aa-49d2-849d-a1f6f8a7ff09",
+    "name": "Checkout Tester",
+    "phone": "9876543210",
+    "street": "10 Downing Street",
+    "city": "London",
+    "state": "Greater London",
+    "postalCode": "SW1A 2AA",
+    "country": "United Kingdom",
+    "isDefault": true
+  },
+  {
+    "_id": "f38ac2e1-5a3e-43ff-b7a1-81efa51ed879",
+    "createdAt": "2026-08-22T18:59:18.420Z",
+    "updatedAt": "2026-08-22T18:59:18.420Z",
+    "userId": "admin-super-id-001",
+    "name": "pratham",
+    "phone": "7894554987",
+    "street": "Chimeny Road",
+    "city": "Ludhiana",
+    "state": "Punjab",
+    "postalCode": "141003",
+    "country": "India",
+    "isDefault": false
+  }
+]

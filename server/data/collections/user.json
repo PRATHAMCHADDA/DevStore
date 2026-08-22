@@ -1,28 +1,77 @@
 [
   {
-    "_id": "22a97cdd-aac9-4bab-9526-1c243cf8eb76",
-    "createdAt": "2026-07-21T05:13:10.475Z",
-    "updatedAt": "2026-07-21T05:13:10.475Z",
-    "name": "Dev User",
-    "username": "devuser22",
-    "email": "devuser22@devstore.com",
-    "phone": "8888888888",
-    "password": "$2a$10$JQFV59TrybxDzbnEaap08eBwsWDuCW9oWfTsEkvatoRtwXfyolgbG",
-    "otp": "222321",
-    "otpExpiry": "2026-07-21T05:23:10.472Z",
-    "verified": false
+    "_id": "admin-super-id-001",
+    "createdAt": "2026-08-22T18:32:48.114Z",
+    "updatedAt": "2026-08-22T18:58:24.364Z",
+    "name": "Super Admin",
+    "username": "admin",
+    "email": "admin@devstore.com",
+    "phone": "9999999999",
+    "password": "$2a$10$hqE79pi/4gD4xq7FWomdY.DaY2aFU6f.T5LLEaPJQIgCQhtGwjSH6",
+    "role": "admin",
+    "verified": true,
+    "loginHistory": [
+      {
+        "device": "node",
+        "ip": "::1",
+        "loginAt": "2026-08-22T18:32:59.662Z"
+      },
+      {
+        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+        "ip": "::1",
+        "loginAt": "2026-08-22T18:37:09.834Z"
+      },
+      {
+        "device": "node",
+        "ip": "::1",
+        "loginAt": "2026-08-22T18:45:47.272Z"
+      },
+      {
+        "device": "node",
+        "ip": "::1",
+        "loginAt": "2026-08-22T18:50:59.998Z"
+      },
+      {
+        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+        "ip": "::1",
+        "loginAt": "2026-08-22T18:52:31.480Z"
+      },
+      {
+        "device": "node",
+        "ip": "::1",
+        "loginAt": "2026-08-22T18:54:12.096Z"
+      },
+      {
+        "device": "node",
+        "ip": "::1",
+        "loginAt": "2026-08-22T18:55:30.953Z"
+      },
+      {
+        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+        "ip": "::1",
+        "loginAt": "2026-08-22T18:58:24.363Z"
+      }
+    ]
   },
   {
-    "_id": "29af9294-607e-44bb-8445-c1c17f1279d8",
-    "createdAt": "2026-07-21T13:41:48.576Z",
-    "updatedAt": "2026-07-21T13:41:48.576Z",
-    "name": "dev",
-    "username": "devuser",
-    "email": "devuser22@gmail.com",
-    "phone": "1234567890",
-    "password": "$2a$10$h7c/ONaITyKBB9VrCouusOcNmBHF5WSO46whheTf1DKtQMQtJ27N6",
-    "otp": "292475",
-    "otpExpiry": "2026-07-21T13:51:48.560Z",
-    "verified": false
+    "_id": "f0abfea3-6744-414a-a545-4d625881a31d",
+    "createdAt": "2026-08-22T18:57:06.858Z",
+    "updatedAt": "2026-08-22T18:57:50.335Z",
+    "name": "pratham",
+    "username": "pratham_chadda",
+    "email": "pratham1@gmail.com",
+    "phone": "7894554987",
+    "password": "$2a$10$4/hdid7DmsoejAEeOKY/AubIjgLG.Yea1z.6YpWqtDXvWQi6NyNBG",
+    "role": "user",
+    "otp": "868574",
+    "otpExpiry": "2026-08-22T19:07:06.857Z",
+    "verified": true,
+    "loginHistory": [
+      {
+        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+        "ip": "::1",
+        "loginAt": "2026-08-22T18:57:50.335Z"
+      }
+    ]
   }
 ]
