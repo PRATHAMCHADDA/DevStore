@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 // DB imports
 import { connectDB } from './config/db.js';
 import { syncSQLModels } from './models/sqlModels.js';
-import { seedDatabase } from './config/seed.js';
+import { seedDatabase, seedDefaultData } from './config/seed.js';
 
 // Route imports
 import authRoutes from './routes/authRoutes.js';
@@ -125,10 +125,15 @@ const initializeServices = async () => {
   await dbInitPromise;
 };
 
-// Ensure DB initialization middleware for serverless requests
+// Ensure DB initialization & auto-seeder middleware for serverless requests
 app.use(async (req, res, next) => {
-  if (!isDbInitialized) {
-    await initializeServices();
+  try {
+    if (!isDbInitialized) {
+      await initializeServices();
+    }
+    await seedDefaultData();
+  } catch (e) {
+    console.error('Seeder execution error:', e.message);
   }
   next();
 });

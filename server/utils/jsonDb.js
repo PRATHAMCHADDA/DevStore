@@ -7,7 +7,20 @@ import { v4 as uuidv4 } from 'uuid';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const LOCAL_DATA_DIR = path.join(__dirname, '../data/collections');
+// Candidate source directories for dataset JSON files
+const getSourceDataDir = () => {
+  const candidates = [
+    path.join(process.cwd(), 'server/data/collections'),
+    path.join(process.cwd(), 'data/collections'),
+    path.join(__dirname, '../data/collections')
+  ];
+  for (const dir of candidates) {
+    if (fs.existsSync(dir)) return dir;
+  }
+  return candidates[0];
+};
+
+const LOCAL_DATA_DIR = getSourceDataDir();
 const TMP_DATA_DIR = path.join(os.tmpdir(), 'devstore_collections');
 
 const isVercel = Boolean(process.env.VERCEL);
@@ -32,30 +45,65 @@ class JsonCollection {
   }
 
   _read() {
-    // In Vercel environment, seed /tmp file from repository default collection if available
-    if (isVercel && !fs.existsSync(this.filePath)) {
-      const seedPath = path.join(LOCAL_DATA_DIR, `${this.name.toLowerCase()}.json`);
-      if (fs.existsSync(seedPath)) {
+    const colLower = this.name.toLowerCase();
+    const colCap = colLower.charAt(0).toUpperCase() + colLower.slice(1);
+
+    // In Vercel environment, ensure /tmp file is seeded from default collection JSON if missing or empty
+    if (isVercel) {
+      const tmpFilePath = path.join(TMP_DATA_DIR, `${colLower}.json`);
+      let shouldSeed = !fs.existsSync(tmpFilePath);
+      if (!shouldSeed) {
         try {
-          const initialContent = fs.readFileSync(seedPath, 'utf-8');
-          fs.writeFileSync(this.filePath, initialContent, 'utf-8');
+          const stats = fs.statSync(tmpFilePath);
+          if (stats.size <= 2) shouldSeed = true;
         } catch (e) {
-          console.warn(`Vercel /tmp seed notice for ${this.name}:`, e.message);
+          shouldSeed = true;
+        }
+      }
+
+      if (shouldSeed) {
+        const seedCandidates = [
+          path.join(process.cwd(), 'server/data/collections', `${colLower}.json`),
+          path.join(process.cwd(), 'server/data/collections', `${colCap}.json`),
+          path.join(process.cwd(), 'data/collections', `${colLower}.json`),
+          path.join(process.cwd(), 'data/collections', `${colCap}.json`),
+          path.join(__dirname, '../data/collections', `${colLower}.json`),
+          path.join(__dirname, '../data/collections', `${colCap}.json`)
+        ];
+
+        for (const seedPath of seedCandidates) {
+          if (fs.existsSync(seedPath)) {
+            try {
+              const content = fs.readFileSync(seedPath, 'utf-8');
+              if (content && content.trim().length > 2) {
+                if (!fs.existsSync(TMP_DATA_DIR)) {
+                  fs.mkdirSync(TMP_DATA_DIR, { recursive: true });
+                }
+                fs.writeFileSync(tmpFilePath, content, 'utf-8');
+                console.log(`✅ Auto-seeded Vercel /tmp for ${colLower} from ${seedPath}`);
+                break;
+              }
+            } catch (e) {
+              console.warn(`Vercel /tmp seed copy error for ${colLower}:`, e.message);
+            }
+          }
         }
       }
     }
 
     if (!fs.existsSync(this.filePath)) {
-      return memoryStore.get(this.name) || [];
+      return memoryStore.get(colLower) || memoryStore.get(this.name) || [];
     }
+
     try {
       const content = fs.readFileSync(this.filePath, 'utf-8');
       const parsed = JSON.parse(content || '[]');
+      memoryStore.set(colLower, parsed);
       memoryStore.set(this.name, parsed);
       return parsed;
     } catch (err) {
       console.error(`Error reading database file: ${this.filePath}`, err);
-      return memoryStore.get(this.name) || [];
+      return memoryStore.get(colLower) || memoryStore.get(this.name) || [];
     }
   }
 
