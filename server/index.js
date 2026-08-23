@@ -101,29 +101,47 @@ app.use((err, req, res, next) => {
   });
 });
 
-// App Startup
-const startServer = async () => {
-  try {
-    console.log('Initializing DevStore Server services...');
-    
-    // Connect to databases
-    const { dbStatus } = await connectDB();
-    console.log(`Database Status: MongoDB -> ${dbStatus.mongo}, SQL -> ${dbStatus.sql}`);
+// App Startup & Serverless Middleware
+let isDbInitialized = false;
+let dbInitPromise = null;
 
-    // Sync SQL models (SQLite / MySQL)
-    await syncSQLModels();
-    console.log('✅ SQL Schema verified.');
+const initializeServices = async () => {
+  if (isDbInitialized) return;
+  if (!dbInitPromise) {
+    dbInitPromise = (async () => {
+      try {
+        console.log('Initializing DevStore Server services...');
+        const { dbStatus } = await connectDB();
+        console.log(`Database Status: MongoDB -> ${dbStatus?.mongo}, SQL -> ${dbStatus?.sql}`);
+        await syncSQLModels();
+        console.log('✅ SQL Schema verified.');
+        await seedDatabase();
+        isDbInitialized = true;
+      } catch (error) {
+        console.error('❌ DB Initialization error:', error.message);
+      }
+    })();
+  }
+  await dbInitPromise;
+};
 
-    // Seed database if empty
-    await seedDatabase();
+// Ensure DB initialization middleware for serverless requests
+app.use(async (req, res, next) => {
+  if (!isDbInitialized) {
+    await initializeServices();
+  }
+  next();
+});
 
+// Standalone Server Startup for Local Development
+if (!process.env.VERCEL) {
+  initializeServices().then(() => {
     app.listen(PORT, () => {
       console.log(`🚀 DevStore Backend running on http://localhost:${PORT}`);
     });
-  } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
-  }
-};
+  }).catch(err => {
+    console.error('❌ Failed to start server:', err);
+  });
+}
 
-startServer();
+export default app;

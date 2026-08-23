@@ -1,15 +1,28 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_DIR = path.join(__dirname, '../data/collections');
+
+const LOCAL_DATA_DIR = path.join(__dirname, '../data/collections');
+const TMP_DATA_DIR = path.join(os.tmpdir(), 'devstore_collections');
+
+const isVercel = Boolean(process.env.VERCEL);
+const DATA_DIR = isVercel ? TMP_DATA_DIR : LOCAL_DATA_DIR;
+
+// In-memory fallback cache
+const memoryStore = new Map();
 
 // Ensure collection directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+try {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+} catch (e) {
+  console.warn('Notice: Read-only filesystem detected for jsonDb, relying on memory cache fallback.');
 }
 
 class JsonCollection {
@@ -19,24 +32,42 @@ class JsonCollection {
   }
 
   _read() {
+    // In Vercel environment, seed /tmp file from repository default collection if available
+    if (isVercel && !fs.existsSync(this.filePath)) {
+      const seedPath = path.join(LOCAL_DATA_DIR, `${this.name.toLowerCase()}.json`);
+      if (fs.existsSync(seedPath)) {
+        try {
+          const initialContent = fs.readFileSync(seedPath, 'utf-8');
+          fs.writeFileSync(this.filePath, initialContent, 'utf-8');
+        } catch (e) {
+          console.warn(`Vercel /tmp seed notice for ${this.name}:`, e.message);
+        }
+      }
+    }
+
     if (!fs.existsSync(this.filePath)) {
-      this._write([]);
-      return [];
+      return memoryStore.get(this.name) || [];
     }
     try {
       const content = fs.readFileSync(this.filePath, 'utf-8');
-      return JSON.parse(content || '[]');
+      const parsed = JSON.parse(content || '[]');
+      memoryStore.set(this.name, parsed);
+      return parsed;
     } catch (err) {
       console.error(`Error reading database file: ${this.filePath}`, err);
-      return [];
+      return memoryStore.get(this.name) || [];
     }
   }
 
   _write(data) {
+    memoryStore.set(this.name, data);
     try {
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
       fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2), 'utf-8');
     } catch (err) {
-      console.error(`Error writing database file: ${this.filePath}`, err);
+      console.warn(`Filesystem write notice for ${this.name} (using memory state):`, err.message);
     }
   }
 
