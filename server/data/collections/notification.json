@@ -844,5 +844,23 @@
     "title": "Welcome to DevStore!",
     "message": "Thank you for signing up. Your account is active.",
     "type": "system"
+  },
+  {
+    "_id": "4b6849e2-a687-4eeb-a2f8-94708dd69afb",
+    "createdAt": "2026-08-23T05:47:12.190Z",
+    "updatedAt": "2026-08-23T05:47:12.190Z",
+    "userId": "0cdfa394-0af2-400a-827f-64b42ee8587c",
+    "title": "Welcome to DevStore!",
+    "message": "Thank you for signing up. Your account is active.",
+    "type": "system"
+  },
+  {
+    "_id": "c6605894-cac1-4a4c-8f8e-a3975609719b",
+    "createdAt": "2026-08-23T05:47:16.435Z",
+    "updatedAt": "2026-08-23T05:47:16.435Z",
+    "userId": "51fb4e75-1cff-4bdf-b85e-9d0bf4af3b6c",
+    "title": "Welcome to DevStore!",
+    "message": "Thank you for signing up. Your account is active.",
+    "type": "system"
   }
 ]

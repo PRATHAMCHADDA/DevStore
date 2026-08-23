@@ -7,15 +7,51 @@ import { v4 as uuidv4 } from 'uuid';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Dynamic storage directory resolver
-const getStorageDir = () => {
-  if (process.env.VERCEL) {
-    const tmpDir = '/tmp/devstore_collections';
-    if (!fs.existsSync(tmpDir)) {
-      try { fs.mkdirSync(tmpDir, { recursive: true }); } catch (e) {}
-    }
-    return tmpDir;
+// Persistent global memory store for Vercel Serverless environment
+if (!global.__devstore_db__) {
+  global.__devstore_db__ = {};
+}
+
+// Helper to pre-load default JSON files into global.__devstore_db__ if empty
+const loadInitialSeedData = (colName) => {
+  const colLower = colName.toLowerCase();
+  const colCap = colLower.charAt(0).toUpperCase() + colLower.slice(1);
+  if (global.__devstore_db__[colLower] && global.__devstore_db__[colLower].length > 0) {
+    return global.__devstore_db__[colLower];
   }
+
+  const seedCandidates = [
+    path.join(process.cwd(), 'server/data/collections', `${colLower}.json`),
+    path.join(process.cwd(), 'server/data/collections', `${colCap}.json`),
+    path.join(process.cwd(), 'data/collections', `${colLower}.json`),
+    path.join(process.cwd(), 'data/collections', `${colCap}.json`),
+    path.join(__dirname, '../data/collections', `${colLower}.json`),
+    path.join(__dirname, '../data/collections', `${colCap}.json`)
+  ];
+
+  for (const seedPath of seedCandidates) {
+    if (fs.existsSync(seedPath)) {
+      try {
+        const content = fs.readFileSync(seedPath, 'utf-8');
+        const parsed = JSON.parse(content || '[]');
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          global.__devstore_db__[colLower] = parsed;
+          return parsed;
+        }
+      } catch (e) {
+        console.warn(`Error loading seed dataset for ${colLower}:`, e.message);
+      }
+    }
+  }
+
+  if (!global.__devstore_db__[colLower]) {
+    global.__devstore_db__[colLower] = [];
+  }
+  return global.__devstore_db__[colLower];
+};
+
+// Dynamic storage directory resolver for local development
+const getStorageDir = () => {
   const localCandidates = [
     path.join(process.cwd(), 'server/data/collections'),
     path.join(process.cwd(), 'data/collections'),
@@ -29,7 +65,7 @@ const getStorageDir = () => {
 
 const isVercel = Boolean(process.env.VERCEL);
 
-// In-memory fallback cache
+// In-memory fallback cache for local execution
 const memoryStore = new Map();
 
 class JsonCollection {
@@ -44,74 +80,44 @@ class JsonCollection {
 
   _read() {
     const colLower = this.name.toLowerCase();
-    const colCap = colLower.charAt(0).toUpperCase() + colLower.slice(1);
-    const filePath = this.getFilePath();
 
-    // In Vercel environment, ensure /tmp file is seeded from default collection JSON if missing or empty
+    // On Vercel: Pure In-Memory DB Mode with zero disk reads/writes
     if (isVercel) {
-      const tmpDir = getStorageDir();
-      const tmpFilePath = path.join(tmpDir, `${colLower}.json`);
-      let shouldSeed = !fs.existsSync(tmpFilePath);
-      if (!shouldSeed) {
-        try {
-          const stats = fs.statSync(tmpFilePath);
-          if (stats.size <= 2) shouldSeed = true;
-        } catch (e) {
-          shouldSeed = true;
-        }
+      if (!global.__devstore_db__[colLower] || global.__devstore_db__[colLower].length === 0) {
+        loadInitialSeedData(colLower);
       }
-
-      if (shouldSeed) {
-        const seedCandidates = [
-          path.join(process.cwd(), 'server/data/collections', `${colLower}.json`),
-          path.join(process.cwd(), 'server/data/collections', `${colCap}.json`),
-          path.join(process.cwd(), 'data/collections', `${colLower}.json`),
-          path.join(process.cwd(), 'data/collections', `${colCap}.json`),
-          path.join(__dirname, '../data/collections', `${colLower}.json`),
-          path.join(__dirname, '../data/collections', `${colCap}.json`)
-        ];
-
-        for (const seedPath of seedCandidates) {
-          if (fs.existsSync(seedPath)) {
-            try {
-              const content = fs.readFileSync(seedPath, 'utf-8');
-              if (content && content.trim().length > 2) {
-                if (!fs.existsSync(tmpDir)) {
-                  fs.mkdirSync(tmpDir, { recursive: true });
-                }
-                fs.writeFileSync(tmpFilePath, content, 'utf-8');
-                console.log(`✅ Auto-seeded Vercel /tmp for ${colLower} from ${seedPath}`);
-                break;
-              }
-            } catch (e) {
-              console.warn(`Vercel /tmp seed copy error for ${colLower}:`, e.message);
-            }
-          }
-        }
-      }
+      return global.__devstore_db__[colLower] || [];
     }
 
+    // Local execution: Read from disk
+    const filePath = this.getFilePath();
     if (!fs.existsSync(filePath)) {
-      return memoryStore.get(colLower) || memoryStore.get(this.name) || [];
+      return memoryStore.get(colLower) || [];
     }
 
     try {
       const content = fs.readFileSync(filePath, 'utf-8');
       const parsed = JSON.parse(content || '[]');
       memoryStore.set(colLower, parsed);
-      memoryStore.set(this.name, parsed);
       return parsed;
     } catch (err) {
       console.error(`Error reading database file: ${filePath}`, err);
-      return memoryStore.get(colLower) || memoryStore.get(this.name) || [];
+      return memoryStore.get(colLower) || [];
     }
   }
 
   _write(data) {
     const colLower = this.name.toLowerCase();
-    memoryStore.set(colLower, data);
-    memoryStore.set(this.name, data);
 
+    // On Vercel: Mutate global memory DB directly in memory
+    if (isVercel) {
+      global.__devstore_db__[colLower] = data;
+      memoryStore.set(colLower, data);
+      return;
+    }
+
+    // Local execution: Write to disk as usual
+    memoryStore.set(colLower, data);
     const dir = getStorageDir();
     const filePath = path.join(dir, `${colLower}.json`);
     try {
@@ -120,7 +126,7 @@ class JsonCollection {
       }
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
     } catch (err) {
-      console.warn(`Filesystem write notice for ${this.name} (using memory state):`, err.message);
+      console.warn(`Filesystem write notice for ${this.name}:`, err.message);
     }
   }
 

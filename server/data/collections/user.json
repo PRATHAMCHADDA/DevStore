@@ -97,5 +97,33 @@
     "otp": "380438",
     "otpExpiry": "2026-08-23T05:54:30.128Z",
     "verified": true
+  },
+  {
+    "_id": "0cdfa394-0af2-400a-827f-64b42ee8587c",
+    "createdAt": "2026-08-23T05:47:12.189Z",
+    "updatedAt": "2026-08-23T05:47:12.189Z",
+    "name": "Memory User",
+    "username": "memoryuser_1787464032092",
+    "email": "memoryuser_1787464032092@devstore.com",
+    "phone": "",
+    "password": "$2a$10$233jTOfGqV3faJRudenfqeqvjs9py1vJqR7O1Rqo5YP7bQnK1/oFu",
+    "role": "user",
+    "otp": "582266",
+    "otpExpiry": "2026-08-23T05:57:12.188Z",
+    "verified": true
+  },
+  {
+    "_id": "51fb4e75-1cff-4bdf-b85e-9d0bf4af3b6c",
+    "createdAt": "2026-08-23T05:47:16.434Z",
+    "updatedAt": "2026-08-23T05:47:16.434Z",
+    "name": "Memory User",
+    "username": "memoryuser_1787464036338",
+    "email": "memoryuser_1787464036338@devstore.com",
+    "phone": "",
+    "password": "$2a$10$zCLpODHtRVO5ez8JqJtO..bhcqENlZ25.abqQCXZySHpvu8.pFgbS",
+    "role": "user",
+    "otp": "410391",
+    "otpExpiry": "2026-08-23T05:57:16.433Z",
+    "verified": true
   }
 ]
