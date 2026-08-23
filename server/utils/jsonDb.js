@@ -8,16 +8,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Persistent global memory store for Vercel Serverless environment
-if (!global.__devstore_db__) {
-  global.__devstore_db__ = {};
+if (!global.__DEVSTORE_MEM_DB__) {
+  global.__DEVSTORE_MEM_DB__ = {};
 }
 
-// Helper to pre-load default JSON files into global.__devstore_db__ if empty
+// Helper to pre-load default JSON files into global.__DEVSTORE_MEM_DB__ if empty
 const loadInitialSeedData = (colName) => {
   const colLower = colName.toLowerCase();
   const colCap = colLower.charAt(0).toUpperCase() + colLower.slice(1);
-  if (global.__devstore_db__[colLower] && global.__devstore_db__[colLower].length > 0) {
-    return global.__devstore_db__[colLower];
+  if (global.__DEVSTORE_MEM_DB__[colLower] && global.__DEVSTORE_MEM_DB__[colLower].length > 0) {
+    return global.__DEVSTORE_MEM_DB__[colLower];
   }
 
   const seedCandidates = [
@@ -35,7 +35,7 @@ const loadInitialSeedData = (colName) => {
         const content = fs.readFileSync(seedPath, 'utf-8');
         const parsed = JSON.parse(content || '[]');
         if (Array.isArray(parsed) && parsed.length > 0) {
-          global.__devstore_db__[colLower] = parsed;
+          global.__DEVSTORE_MEM_DB__[colLower] = parsed;
           return parsed;
         }
       } catch (e) {
@@ -44,10 +44,10 @@ const loadInitialSeedData = (colName) => {
     }
   }
 
-  if (!global.__devstore_db__[colLower]) {
-    global.__devstore_db__[colLower] = [];
+  if (!global.__DEVSTORE_MEM_DB__[colLower]) {
+    global.__DEVSTORE_MEM_DB__[colLower] = [];
   }
-  return global.__devstore_db__[colLower];
+  return global.__DEVSTORE_MEM_DB__[colLower];
 };
 
 // Dynamic storage directory resolver for local development
@@ -81,12 +81,12 @@ class JsonCollection {
   _read() {
     const colLower = this.name.toLowerCase();
 
-    // On Vercel: Pure In-Memory DB Mode with zero disk reads/writes
+    // On Vercel: Pure In-Memory DB Mode using global.__DEVSTORE_MEM_DB__
     if (isVercel) {
-      if (!global.__devstore_db__[colLower] || global.__devstore_db__[colLower].length === 0) {
+      if (!global.__DEVSTORE_MEM_DB__[colLower] || global.__DEVSTORE_MEM_DB__[colLower].length === 0) {
         loadInitialSeedData(colLower);
       }
-      return global.__devstore_db__[colLower] || [];
+      return global.__DEVSTORE_MEM_DB__[colLower] || [];
     }
 
     // Local execution: Read from disk
@@ -109,9 +109,9 @@ class JsonCollection {
   _write(data) {
     const colLower = this.name.toLowerCase();
 
-    // On Vercel: Mutate global memory DB directly in memory
+    // On Vercel: Mutate global memory DB directly in memory (zero disk writes)
     if (isVercel) {
-      global.__devstore_db__[colLower] = data;
+      global.__DEVSTORE_MEM_DB__[colLower] = data;
       memoryStore.set(colLower, data);
       return;
     }

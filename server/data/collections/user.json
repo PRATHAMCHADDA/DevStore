@@ -125,5 +125,19 @@
     "otp": "410391",
     "otpExpiry": "2026-08-23T05:57:16.433Z",
     "verified": true
+  },
+  {
+    "_id": "12b42302-1b92-4138-b063-042830e90aeb",
+    "createdAt": "2026-08-23T05:51:07.464Z",
+    "updatedAt": "2026-08-23T05:51:07.464Z",
+    "name": "Vercel User",
+    "username": "verceluser_1787464267370",
+    "email": "verceluser_1787464267370@devstore.com",
+    "phone": "",
+    "password": "$2a$10$2Vo7aX0vVNUD4VRjA0IPTeoYN2ULoYDDefmV9mbiW6T/HY6fX15RS",
+    "role": "user",
+    "otp": "652713",
+    "otpExpiry": "2026-08-23T06:01:07.464Z",
+    "verified": true
   }
 ]

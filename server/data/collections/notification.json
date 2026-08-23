@@ -862,5 +862,14 @@
     "title": "Welcome to DevStore!",
     "message": "Thank you for signing up. Your account is active.",
     "type": "system"
+  },
+  {
+    "_id": "d58db3af-4da6-451a-bced-a0e55ce952d2",
+    "createdAt": "2026-08-23T05:51:07.466Z",
+    "updatedAt": "2026-08-23T05:51:07.466Z",
+    "userId": "12b42302-1b92-4138-b063-042830e90aeb",
+    "title": "Welcome to DevStore!",
+    "message": "Thank you for signing up. Your account is active.",
+    "type": "system"
   }
 ]

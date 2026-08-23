@@ -103,7 +103,7 @@ export const register = async (req, res, next) => {
     delete userResponse.password;
     if (!userResponse.role) userResponse.role = assignedRole;
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: 'Signed up successfully',
       token: accessToken,
