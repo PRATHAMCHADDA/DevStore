@@ -218,5 +218,12 @@
     "updatedAt": "2026-08-22T18:57:50.366Z",
     "userId": "f0abfea3-6744-414a-a545-4d625881a31d",
     "items": []
+  },
+  {
+    "_id": "dedb8b18-a8fe-4cb6-87fe-60bdc5cb4e79",
+    "createdAt": "2026-08-23T06:28:57.912Z",
+    "updatedAt": "2026-08-23T06:28:57.912Z",
+    "userId": "22b12cd5-0a01-44c8-b59c-13db08acd75f",
+    "items": []
   }
 ]

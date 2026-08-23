@@ -2,7 +2,7 @@
   {
     "_id": "admin-super-id-001",
     "createdAt": "2026-08-22T18:32:48.114Z",
-    "updatedAt": "2026-08-23T05:54:04.583Z",
+    "updatedAt": "2026-08-23T06:37:53.882Z",
     "name": "Super Admin",
     "username": "admin",
     "email": "admin@devstore.com",
@@ -12,146 +12,56 @@
     "verified": true,
     "loginHistory": [
       {
-        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
-        "ip": "::1",
-        "loginAt": "2026-08-22T18:37:09.834Z"
-      },
-      {
         "device": "node",
         "ip": "::1",
-        "loginAt": "2026-08-22T18:45:47.272Z"
-      },
-      {
-        "device": "node",
-        "ip": "::1",
-        "loginAt": "2026-08-22T18:50:59.998Z"
-      },
-      {
-        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
-        "ip": "::1",
-        "loginAt": "2026-08-22T18:52:31.480Z"
-      },
-      {
-        "device": "node",
-        "ip": "::1",
-        "loginAt": "2026-08-22T18:54:12.096Z"
-      },
-      {
-        "device": "node",
-        "ip": "::1",
-        "loginAt": "2026-08-22T18:55:30.953Z"
-      },
-      {
-        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
-        "ip": "::1",
-        "loginAt": "2026-08-22T18:58:24.363Z"
+        "loginAt": "2026-08-23T06:26:11.543Z"
       },
       {
         "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
         "ip": "::1",
-        "loginAt": "2026-08-22T19:37:52.007Z"
+        "loginAt": "2026-08-23T06:26:44.531Z"
       },
       {
         "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
         "ip": "::1",
-        "loginAt": "2026-08-23T05:03:23.194Z"
+        "loginAt": "2026-08-23T06:29:00.171Z"
       },
       {
         "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
         "ip": "::1",
-        "loginAt": "2026-08-23T05:54:04.581Z"
+        "loginAt": "2026-08-23T06:31:05.298Z"
+      },
+      {
+        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+        "ip": "::1",
+        "loginAt": "2026-08-23T06:31:29.733Z"
+      },
+      {
+        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+        "ip": "::1",
+        "loginAt": "2026-08-23T06:37:53.881Z"
       }
     ]
   },
   {
-    "_id": "f0abfea3-6744-414a-a545-4d625881a31d",
-    "createdAt": "2026-08-22T18:57:06.858Z",
-    "updatedAt": "2026-08-22T18:57:50.335Z",
+    "_id": "22b12cd5-0a01-44c8-b59c-13db08acd75f",
+    "createdAt": "2026-08-23T06:28:44.762Z",
+    "updatedAt": "2026-08-23T06:29:28.509Z",
     "name": "pratham",
     "username": "pratham_chadda",
-    "email": "pratham1@gmail.com",
+    "email": "pratham2@gmail.com",
     "phone": "7894554987",
-    "password": "$2a$10$4/hdid7DmsoejAEeOKY/AubIjgLG.Yea1z.6YpWqtDXvWQi6NyNBG",
+    "password": "$2a$10$8H5xBubU7gYPaClDwNVvee0ESyEa.WPkiTvqbbzATdwPji8F5G4.S",
     "role": "user",
-    "otp": "868574",
-    "otpExpiry": "2026-08-22T19:07:06.857Z",
+    "otp": "669440",
+    "otpExpiry": "2026-08-23T06:38:44.761Z",
     "verified": true,
     "loginHistory": [
       {
-        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
         "ip": "::1",
-        "loginAt": "2026-08-22T18:57:50.335Z"
+        "loginAt": "2026-08-23T06:29:28.508Z"
       }
     ]
-  },
-  {
-    "_id": "1559083d-7a9e-42db-87f9-d10035a9f468",
-    "createdAt": "2026-08-23T05:44:30.128Z",
-    "updatedAt": "2026-08-23T05:44:30.128Z",
-    "name": "Test Serverless User",
-    "username": "testuser_1787463870035",
-    "email": "testuser_1787463870035@devstore.com",
-    "phone": "",
-    "password": "$2a$10$z3AQDQRCqA5rAnQ4etvhn.DxGVi7yUYs4E77QJ3A63.swWqGxeLSO",
-    "role": "user",
-    "otp": "380438",
-    "otpExpiry": "2026-08-23T05:54:30.128Z",
-    "verified": true
-  },
-  {
-    "_id": "0cdfa394-0af2-400a-827f-64b42ee8587c",
-    "createdAt": "2026-08-23T05:47:12.189Z",
-    "updatedAt": "2026-08-23T05:47:12.189Z",
-    "name": "Memory User",
-    "username": "memoryuser_1787464032092",
-    "email": "memoryuser_1787464032092@devstore.com",
-    "phone": "",
-    "password": "$2a$10$233jTOfGqV3faJRudenfqeqvjs9py1vJqR7O1Rqo5YP7bQnK1/oFu",
-    "role": "user",
-    "otp": "582266",
-    "otpExpiry": "2026-08-23T05:57:12.188Z",
-    "verified": true
-  },
-  {
-    "_id": "51fb4e75-1cff-4bdf-b85e-9d0bf4af3b6c",
-    "createdAt": "2026-08-23T05:47:16.434Z",
-    "updatedAt": "2026-08-23T05:47:16.434Z",
-    "name": "Memory User",
-    "username": "memoryuser_1787464036338",
-    "email": "memoryuser_1787464036338@devstore.com",
-    "phone": "",
-    "password": "$2a$10$zCLpODHtRVO5ez8JqJtO..bhcqENlZ25.abqQCXZySHpvu8.pFgbS",
-    "role": "user",
-    "otp": "410391",
-    "otpExpiry": "2026-08-23T05:57:16.433Z",
-    "verified": true
-  },
-  {
-    "_id": "12b42302-1b92-4138-b063-042830e90aeb",
-    "createdAt": "2026-08-23T05:51:07.464Z",
-    "updatedAt": "2026-08-23T05:51:07.464Z",
-    "name": "Vercel User",
-    "username": "verceluser_1787464267370",
-    "email": "verceluser_1787464267370@devstore.com",
-    "phone": "",
-    "password": "$2a$10$2Vo7aX0vVNUD4VRjA0IPTeoYN2ULoYDDefmV9mbiW6T/HY6fX15RS",
-    "role": "user",
-    "otp": "652713",
-    "otpExpiry": "2026-08-23T06:01:07.464Z",
-    "verified": true
-  },
-  {
-    "_id": "415805af-ab27-4115-b833-78aae24a03b5",
-    "createdAt": "2026-08-23T06:02:03.384Z",
-    "updatedAt": "2026-08-23T06:02:03.384Z",
-    "name": "reCAPTCHA User",
-    "username": "recaptcha_user_1787464923278",
-    "email": "recaptcha_user_1787464923278@devstore.com",
-    "phone": "",
-    "password": "$2a$10$v0F9JwF2VWnDAjfSYnSm7.5B9AplSmpph3/BT6.J7259KMnRB9RSe",
-    "role": "user",
-    "otp": "395455",
-    "otpExpiry": "2026-08-23T06:12:03.383Z",
-    "verified": true
   }
 ]

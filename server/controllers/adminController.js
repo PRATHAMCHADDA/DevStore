@@ -1,4 +1,4 @@
-import { Product, Order, User, Category, Brand, Coupon, Review, Payment } from '../models/index.js';
+import { Product, Order, User, Category, Brand, Coupon, Review, Payment, RefreshToken } from '../models/index.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getDashboardStats = async (req, res, next) => {
@@ -210,22 +210,6 @@ export const adminGetUsers = async (req, res, next) => {
   try {
     const allUsers = await User.find();
 
-    const dummyPatterns = [
-      'test realtime', 'strict test', 'pdf tester', 'checkout tester',
-      'enterprise pdf', 'pdf verify', 'fresh pdf', 'routing pdf', 'breakdown pdf',
-      'devuser22@devstore.com', 'testuser_', 'testdebug_', 'pdftest_', 'strict_'
-    ];
-
-    const isDummyUser = (u) => {
-      const name = (u.name || '').toLowerCase();
-      const email = (u.email || '').toLowerCase();
-      const username = (u.username || '').toLowerCase();
-
-      return dummyPatterns.some(pattern =>
-        name.includes(pattern) || email.includes(pattern) || username.includes(pattern)
-      );
-    };
-
     const seenEmails = new Set();
     const sanitised = [];
 
@@ -235,7 +219,7 @@ export const adminGetUsers = async (req, res, next) => {
       if (!copy.role) copy.role = 'user';
 
       const emailKey = (copy.email || '').toLowerCase().trim();
-      if (!emailKey || seenEmails.has(emailKey) || isDummyUser(copy)) {
+      if (!emailKey || seenEmails.has(emailKey)) {
         continue;
       }
       seenEmails.add(emailKey);
@@ -243,6 +227,29 @@ export const adminGetUsers = async (req, res, next) => {
     }
 
     res.status(200).json(sanitised);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const adminDeleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userToDelete = await User.findById(id);
+
+    if (!userToDelete) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const userEmail = (userToDelete.email || '').toLowerCase().trim();
+
+    if (userToDelete.role === 'admin' || userEmail === 'admin@devstore.com') {
+      return res.status(403).json({ message: 'Protected admin accounts cannot be deleted.' });
+    }
+
+    await User.findByIdAndDelete(id);
+    await RefreshToken.deleteOne({ userId: id.toString() });
+    res.status(200).json({ message: 'User deleted successfully.' });
   } catch (error) {
     next(error);
   }

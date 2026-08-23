@@ -46,6 +46,21 @@ export const Shop = () => {
     fetchMetadata();
   }, []);
 
+  // Sync state when URL query parameters change (e.g. from Footer links)
+  useEffect(() => {
+    const cat = searchParams.get('category');
+    if (cat !== null && cat !== undefined) {
+      if (!cat) {
+        setSelCategory('');
+      } else if (categoriesList.length > 0) {
+        const match = categoriesList.find(c => c.name.toLowerCase() === cat.toLowerCase() || c.slug.toLowerCase() === cat.toLowerCase());
+        setSelCategory(match ? match.name : cat);
+      } else {
+        setSelCategory(cat);
+      }
+    }
+  }, [searchParams, categoriesList]);
+
   // Fetch catalog products
   const fetchProducts = async () => {
     setLoading(true);

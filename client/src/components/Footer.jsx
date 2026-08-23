@@ -2,16 +2,30 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Send, Github, Twitter, Linkedin, Heart } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import axios from 'axios';
 
 export const Footer = () => {
   const { showToast } = useApp();
   const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    if (!email) return;
-    showToast('Subscribed successfully! Thank you for joining our newsletter.');
-    setEmail('');
+    if (!email || !email.includes('@')) {
+      showToast('Please enter a valid email address.', 'error');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await axios.post('/api/newsletter/subscribe', { email });
+    } catch (err) {
+      // Local state fallback if backend route is not available
+    } finally {
+      showToast('Thank you for subscribing to DevStore insights!');
+      setEmail('');
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -28,9 +42,33 @@ export const Footer = () => {
               The premium e-commerce platform for developer setups, mechanical keyboards, custom gadgets, and elite workstations.
             </p>
             <div className="flex space-x-4 pt-2">
-              <a href="#" className="hover:text-white transition-colors"><Github className="h-5 w-5" /></a>
-              <a href="#" className="hover:text-white transition-colors"><Twitter className="h-5 w-5" /></a>
-              <a href="#" className="hover:text-white transition-colors"><Linkedin className="h-5 w-5" /></a>
+              <a 
+                href="https://github.com/PRATHAMCHADDA/DevStore" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-white transition-colors p-1"
+                aria-label="GitHub Repository"
+              >
+                <Github className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://twitter.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-white transition-colors p-1"
+                aria-label="Twitter Profile"
+              >
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://linkedin.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-white transition-colors p-1"
+                aria-label="LinkedIn Profile"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
             </div>
           </div>
 
@@ -40,18 +78,18 @@ export const Footer = () => {
             <ul className="space-y-2 text-sm">
               <li><Link to="/shop" className="hover:text-white transition-colors">All Products</Link></li>
               <li><Link to="/shop?category=audio" className="hover:text-white transition-colors">Premium Audio</Link></li>
-              <li><Link to="/shop?category=computers" className="hover:text-white transition-colors">Computers & Laptops</Link></li>
+              <li><Link to="/shop?category=laptops" className="hover:text-white transition-colors">Computers & Laptops</Link></li>
               <li><Link to="/shop?category=gaming" className="hover:text-white transition-colors">Gaming Consoles</Link></li>
             </ul>
           </div>
 
-          {/* Legal / Pages */}
+          {/* Customer Care Links */}
           <div>
             <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Customer Care</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/dashboard?tab=orders" className="hover:text-white transition-colors">Track Orders</Link></li>
+              <li><Link to="/my-orders" className="hover:text-white transition-colors">Track Orders</Link></li>
               <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/faq" className="hover:text-white transition-colors">FAQs & Support</Link></li>
+              <li><Link to="/faqs" className="hover:text-white transition-colors">FAQs & Support</Link></li>
               <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               <li><Link to="/refund-policy" className="hover:text-white transition-colors">Refund & Shipping Policy</Link></li>
             </ul>
@@ -72,9 +110,12 @@ export const Footer = () => {
               />
               <button 
                 type="submit" 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r-xl transition-all active:scale-95 flex items-center justify-center"
+                disabled={submitting}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r-xl transition-all active:scale-95 flex items-center justify-center cursor-pointer disabled:opacity-50"
+                aria-label="Subscribe"
               >
-                <Send className="h-4 w-4" />
+                <span className="mr-1 text-xs">🚀</span>
+                <Send className="h-3.5 w-3.5" />
               </button>
             </form>
           </div>

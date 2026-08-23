@@ -8,6 +8,7 @@ import {
   adminUpdateOrderStatus,
   adminRefundOrder,
   adminGetUsers,
+  adminDeleteUser,
   adminPromoteUser,
   adminGetCoupons,
   adminAddCoupon,
@@ -39,8 +40,9 @@ router.get('/orders', requireAdmin, adminGetOrders);
 router.put('/orders/:orderId/status', requireAdmin, adminUpdateOrderStatus);
 router.put('/orders/:orderId/refund', requireAdmin, adminRefundOrder);
 
-// Users promotion
+// Users management
 router.get('/users', requireAdmin, adminGetUsers);
+router.delete('/users/:id', requireAdmin, adminDeleteUser);
 router.put('/users/:id/role', devOrAdmin, adminPromoteUser);
 router.post('/users/:id/role', devOrAdmin, adminPromoteUser);
 

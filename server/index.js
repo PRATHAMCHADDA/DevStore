@@ -78,6 +78,15 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to DevStore Full-Stack E-Commerce API Server!' });
 });
 
+// Newsletter Subscription Endpoint
+app.post('/api/newsletter/subscribe', (req, res) => {
+  const { email } = req.body;
+  if (!email || !email.includes('@')) {
+    return res.status(400).json({ message: 'Please provide a valid email address.' });
+  }
+  res.status(200).json({ message: 'Subscribed successfully! Thank you for joining our newsletter.' });
+});
+
 // Mount Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);

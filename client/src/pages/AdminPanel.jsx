@@ -165,6 +165,17 @@ export const AdminPanel = () => {
     try { await axios.put(`/api/admin/users/${id}/role`, { role }); fetchUsers(); showToast('Role updated.'); } catch(e) { showToast('Failed.', 'error'); }
   };
 
+  const handleDeleteUser = async (id) => {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+    try {
+      await axios.delete(`/api/admin/users/${id}`);
+      setUsers(prevUsers => prevUsers.filter(u => (u._id || u.id) !== id));
+      showToast('User deleted successfully', 'success');
+    } catch(e) {
+      showToast(e.response?.data?.message || 'Failed to delete user.', 'error');
+    }
+  };
+
   const handleSaveCoupon = async (e) => {
     e.preventDefault();
     try {
@@ -452,18 +463,37 @@ export const AdminPanel = () => {
                 <div className="glass rounded-3xl border border-slate-200/50 dark:border-slate-800/80 overflow-hidden">
                   <table className="w-full text-xs">
                     <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
-                      <tr>{['Name','Email','Role'].map(h => <th key={h} className="px-4 py-3 text-left text-[10px] font-extrabold text-slate-400 uppercase">{h}</th>)}</tr>
+                      <tr>{['Name','Email','Role','Actions'].map(h => <th key={h} className="px-4 py-3 text-left text-[10px] font-extrabold text-slate-400 uppercase">{h}</th>)}</tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
-                      {users.map(u => (
-                        <tr key={u._id || u.id || u.email} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
-                          <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">{u.name || u.username || 'User'}</td>
-                          <td className="px-4 py-3 text-slate-500">{u.email}</td>
-                          <td className="px-4 py-3">
-                            <span className={`text-[9px] px-2.5 py-1 rounded-full font-extrabold uppercase tracking-wider ${u.role === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{u.role}</span>
-                          </td>
-                        </tr>
-                      ))}
+                      {users.map(u => {
+                        const userId = u._id || u.id;
+                        const isProtected = u.role === 'admin' || u.email === 'admin@devstore.com';
+
+                        return (
+                          <tr key={userId || u.email} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+                            <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">{u.name || u.username || 'User'}</td>
+                            <td className="px-4 py-3 text-slate-500">{u.email}</td>
+                            <td className="px-4 py-3">
+                              <span className={`text-[9px] px-2.5 py-1 rounded-full font-extrabold uppercase tracking-wider ${u.role === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{u.role}</span>
+                            </td>
+                            <td className="px-4 py-3">
+                              {isProtected ? (
+                                <span className="px-3 py-1 text-xs font-semibold rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center gap-1.5 w-fit">
+                                  🔒 PROTECTED
+                                </span>
+                              ) : (
+                                <button
+                                  onClick={() => handleDeleteUser(userId)}
+                                  className="px-3 py-1 text-xs font-semibold rounded-md bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 transition-all duration-200 cursor-pointer"
+                                >
+                                  Delete User
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

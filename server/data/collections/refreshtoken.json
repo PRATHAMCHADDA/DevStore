@@ -584,22 +584,6 @@
     "expiresAt": "2026-08-29T18:55:30.955Z"
   },
   {
-    "_id": "25094bb6-4c10-489e-85d4-c2252e49c06c",
-    "createdAt": "2026-08-22T18:57:06.860Z",
-    "updatedAt": "2026-08-22T18:57:06.860Z",
-    "userId": "f0abfea3-6744-414a-a545-4d625881a31d",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYwYWJmZWEzLTY3NDQtNDE0YS1hNTQ1LTRkNjI1ODgxYTMxZCIsImlhdCI6MTc4NzQyNTAyNiwiZXhwIjoxNzg4MDI5ODI2fQ.5aWnHynS0FzqCt4v9mVv2OpNHyDyOxGdxh3OUtW4GV0",
-    "expiresAt": "2026-08-29T18:57:06.860Z"
-  },
-  {
-    "_id": "aba9d3b5-f620-4b8e-8ad4-8314143d9e90",
-    "createdAt": "2026-08-22T18:57:50.337Z",
-    "updatedAt": "2026-08-22T18:57:50.337Z",
-    "userId": "f0abfea3-6744-414a-a545-4d625881a31d",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYwYWJmZWEzLTY3NDQtNDE0YS1hNTQ1LTRkNjI1ODgxYTMxZCIsImlhdCI6MTc4NzQyNTA3MCwiZXhwIjoxNzg4MDI5ODcwfQ.ya9aa1dZ6SJAKMJ9aTi1kpeMJyjZkDsjfajkfzLMHXg",
-    "expiresAt": "2026-08-29T18:57:50.337Z"
-  },
-  {
     "_id": "a7aa0812-d007-4581-9c8a-712c2e32927c",
     "createdAt": "2026-08-22T18:58:24.367Z",
     "updatedAt": "2026-08-22T18:58:24.367Z",
@@ -646,5 +630,69 @@
     "userId": "415805af-ab27-4115-b833-78aae24a03b5",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQxNTgwNWFmLWFiMjctNDExNS1iODMzLTc4YWFlMjRhMDNiNSIsImlhdCI6MTc4NzQ2NDkyMywiZXhwIjoxNzg4MDY5NzIzfQ.mRkUZ5UDXkJedNbrMtEM_EKzyTEL-at7EODPU_Uh0Sg",
     "expiresAt": "2026-08-30T06:02:03.384Z"
+  },
+  {
+    "_id": "adab0ab0-f519-4437-a365-de8e5fc5fabe",
+    "createdAt": "2026-08-23T06:22:43.779Z",
+    "updatedAt": "2026-08-23T06:22:43.779Z",
+    "userId": "admin-super-id-001",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluLXN1cGVyLWlkLTAwMSIsImlhdCI6MTc4NzQ2NjE2MywiZXhwIjoxNzg4MDcwOTYzfQ.qINMsuFBgWYWEBfoctXxcye02d08eWTonADCdliQ600",
+    "expiresAt": "2026-08-30T06:22:43.778Z"
+  },
+  {
+    "_id": "a5d6e23c-7d55-4572-8ec1-39dcb248399d",
+    "createdAt": "2026-08-23T06:22:52.363Z",
+    "updatedAt": "2026-08-23T06:22:52.363Z",
+    "userId": "admin-super-id-001",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluLXN1cGVyLWlkLTAwMSIsImlhdCI6MTc4NzQ2NjE3MiwiZXhwIjoxNzg4MDcwOTcyfQ.8dDvWlz_Qv_-XmeuXdnFcUUzJLGm9GNWTGbmPpBb4PI",
+    "expiresAt": "2026-08-30T06:22:52.362Z"
+  },
+  {
+    "_id": "a5417574-cb14-4ac0-9b45-2c88fa0774cc",
+    "createdAt": "2026-08-23T06:22:52.451Z",
+    "updatedAt": "2026-08-23T06:22:52.451Z",
+    "userId": "f282a91e-c6ff-436d-ae17-48183e5cb244",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYyODJhOTFlLWM2ZmYtNDM2ZC1hZTE3LTQ4MTgzZTVjYjI0NCIsImlhdCI6MTc4NzQ2NjE3MiwiZXhwIjoxNzg4MDcwOTcyfQ.cS56jf8_IpGIcq0VBGwuFQnKhJtZCNHIKU3szglNoCA",
+    "expiresAt": "2026-08-30T06:22:52.450Z"
+  },
+  {
+    "_id": "d60fc315-6f90-4ddd-981c-5ea4d9b173b1",
+    "createdAt": "2026-08-23T06:26:11.523Z",
+    "updatedAt": "2026-08-23T06:26:11.523Z",
+    "userId": "admin-super-id-001",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluLXN1cGVyLWlkLTAwMSIsImlhdCI6MTc4NzQ2NjM3MSwiZXhwIjoxNzg4MDcxMTcxfQ.JihJVrOCsrrCPk7XvzChcx4MpsEfkuvLo8KbmSSlRio",
+    "expiresAt": "2026-08-30T06:26:11.523Z"
+  },
+  {
+    "_id": "3d8e265a-c382-45e5-80cb-e83feb98ab52",
+    "createdAt": "2026-08-23T06:26:44.533Z",
+    "updatedAt": "2026-08-23T06:26:44.533Z",
+    "userId": "admin-super-id-001",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluLXN1cGVyLWlkLTAwMSIsImlhdCI6MTc4NzQ2NjQwNCwiZXhwIjoxNzg4MDcxMjA0fQ.g3tGFu8QuLUkZ19p_IwFp2xNOB38neY9wwIa8KAr8Eo",
+    "expiresAt": "2026-08-30T06:26:44.533Z"
+  },
+  {
+    "_id": "634541e8-ea4d-4b1f-a1f7-22bfdbc338a7",
+    "createdAt": "2026-08-23T06:28:44.764Z",
+    "updatedAt": "2026-08-23T06:28:44.764Z",
+    "userId": "22b12cd5-0a01-44c8-b59c-13db08acd75f",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyYjEyY2Q1LTBhMDEtNDRjOC1iNTljLTEzZGIwOGFjZDc1ZiIsImlhdCI6MTc4NzQ2NjUyNCwiZXhwIjoxNzg4MDcxMzI0fQ.5jh9y7ZtvsDJY9WT32w1CM4LhermxlyHvQ6uTgI2pzY",
+    "expiresAt": "2026-08-30T06:28:44.764Z"
+  },
+  {
+    "_id": "2d370b7e-27db-4f3f-8d7e-b99863ace4ed",
+    "createdAt": "2026-08-23T06:29:00.173Z",
+    "updatedAt": "2026-08-23T06:29:00.173Z",
+    "userId": "admin-super-id-001",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluLXN1cGVyLWlkLTAwMSIsImlhdCI6MTc4NzQ2NjU0MCwiZXhwIjoxNzg4MDcxMzQwfQ.4K6dhvdtrtAUgAGlrkIN9YjAh3cqX361pXwtbE0YztQ",
+    "expiresAt": "2026-08-30T06:29:00.173Z"
+  },
+  {
+    "_id": "9662c0eb-9f4c-4764-8197-df18252ce399",
+    "createdAt": "2026-08-23T06:37:53.896Z",
+    "updatedAt": "2026-08-23T06:37:53.896Z",
+    "userId": "admin-super-id-001",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluLXN1cGVyLWlkLTAwMSIsImlhdCI6MTc4NzQ2NzA3MywiZXhwIjoxNzg4MDcxODczfQ.zXqW-eM3physYXyyasI3nEGEsw8FEqWeV4qmwX_MC14",
+    "expiresAt": "2026-08-30T06:37:53.894Z"
   }
 ]

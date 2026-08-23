@@ -16,6 +16,10 @@ import { Cart } from './pages/Cart';
 import { Checkout } from './pages/Checkout';
 import { Dashboard } from './pages/Dashboard';
 import { AdminPanel } from './pages/AdminPanel';
+import { AboutUs } from './pages/AboutUs';
+import { FaqSupport } from './pages/FaqSupport';
+import { TermsOfService } from './pages/TermsOfService';
+import { RefundPolicy } from './pages/RefundPolicy';
 
 // Route Guards
 const PrivateRoute = ({ children }) => {
@@ -56,6 +60,12 @@ function AppRoutes() {
             <Route path="/shop" element={<Shop />} />
             <Route path="/product/:slug" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/faq" element={<FaqSupport />} />
+            <Route path="/faqs" element={<FaqSupport />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/privacy" element={<RefundPolicy />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
 
             {/* Guest only routes */}
             <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
@@ -66,6 +76,8 @@ function AppRoutes() {
             {/* Authenticated routes */}
             <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
             <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/my-orders" element={<PrivateRoute><Navigate to="/dashboard?tab=orders" replace /></PrivateRoute>} />
+            <Route path="/orders" element={<PrivateRoute><Navigate to="/dashboard?tab=orders" replace /></PrivateRoute>} />
 
             {/* Admin routes */}
             <Route path="/admin" element={<AdminPanel />} />
