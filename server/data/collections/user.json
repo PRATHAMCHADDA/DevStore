@@ -139,5 +139,19 @@
     "otp": "652713",
     "otpExpiry": "2026-08-23T06:01:07.464Z",
     "verified": true
+  },
+  {
+    "_id": "415805af-ab27-4115-b833-78aae24a03b5",
+    "createdAt": "2026-08-23T06:02:03.384Z",
+    "updatedAt": "2026-08-23T06:02:03.384Z",
+    "name": "reCAPTCHA User",
+    "username": "recaptcha_user_1787464923278",
+    "email": "recaptcha_user_1787464923278@devstore.com",
+    "phone": "",
+    "password": "$2a$10$v0F9JwF2VWnDAjfSYnSm7.5B9AplSmpph3/BT6.J7259KMnRB9RSe",
+    "role": "user",
+    "otp": "395455",
+    "otpExpiry": "2026-08-23T06:12:03.383Z",
+    "verified": true
   }
 ]
