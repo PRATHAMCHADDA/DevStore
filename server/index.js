@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 // DB imports
 import { connectDB } from './config/db.js';
 import { syncSQLModels } from './models/sqlModels.js';
-import { seedDatabase, seedDefaultData } from './config/seed.js';
+import { seedDatabase } from './config/seed.js';
 
 // Route imports
 import authRoutes from './routes/authRoutes.js';
@@ -40,14 +40,13 @@ app.use(helmet({
   crossOriginResourcePolicy: false // Allows loading local uploads in development
 }));
 
-// Express Serverless CORS Policy
+// CORS Configuration
 app.use(cors({
-  origin: true,
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.options('*', cors());
 
 app.use(cookieParser());
 app.use(express.json());
@@ -102,52 +101,29 @@ app.use((err, req, res, next) => {
   });
 });
 
-// App Startup & Serverless Middleware
-let isDbInitialized = false;
-let dbInitPromise = null;
-
-const initializeServices = async () => {
-  if (isDbInitialized) return;
-  if (!dbInitPromise) {
-    dbInitPromise = (async () => {
-      try {
-        console.log('Initializing DevStore Server services...');
-        const { dbStatus } = await connectDB();
-        console.log(`Database Status: MongoDB -> ${dbStatus?.mongo}, SQL -> ${dbStatus?.sql}`);
-        await syncSQLModels();
-        console.log('✅ SQL Schema verified.');
-        await seedDatabase();
-        isDbInitialized = true;
-      } catch (error) {
-        console.error('❌ DB Initialization error:', error.message);
-      }
-    })();
-  }
-  await dbInitPromise;
-};
-
-// Ensure DB initialization & auto-seeder middleware for serverless requests
-app.use(async (req, res, next) => {
+// App Startup
+const startServer = async () => {
   try {
-    if (!isDbInitialized) {
-      await initializeServices();
-    }
-    await seedDefaultData();
-  } catch (e) {
-    console.error('Seeder execution error:', e.message);
-  }
-  next();
-});
+    console.log('Initializing DevStore Server services...');
+    
+    // Connect to databases
+    const { dbStatus } = await connectDB();
+    console.log(`Database Status: MongoDB -> ${dbStatus.mongo}, SQL -> ${dbStatus.sql}`);
 
-// Standalone Server Startup for Local Development
-if (!process.env.VERCEL) {
-  initializeServices().then(() => {
+    // Sync SQL models (SQLite / MySQL)
+    await syncSQLModels();
+    console.log('✅ SQL Schema verified.');
+
+    // Seed database if empty
+    await seedDatabase();
+
     app.listen(PORT, () => {
       console.log(`🚀 DevStore Backend running on http://localhost:${PORT}`);
     });
-  }).catch(err => {
-    console.error('❌ Failed to start server:', err);
-  });
-}
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+};
 
-export default app;
+startServer();

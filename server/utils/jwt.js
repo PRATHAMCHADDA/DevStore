@@ -1,19 +1,16 @@
 import jwt from 'jsonwebtoken';
-
-const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET || 'devstore_default_access_secret_2026';
-const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'devstore_default_refresh_secret_2026';
+import { RefreshToken } from '../models/index.js';
 
 export const generateTokens = (user) => {
-  const userIdStr = user._id ? user._id.toString() : user.id;
   const accessToken = jwt.sign(
-    { id: userIdStr, role: user.role, email: user.email },
-    ACCESS_SECRET,
+    { id: user._id, role: user.role, email: user.email },
+    process.env.JWT_SECRET,
     { expiresIn: '15m' }
   );
 
   const refreshToken = jwt.sign(
-    { id: userIdStr },
-    REFRESH_SECRET,
+    { id: user._id },
+    process.env.JWT_REFRESH_SECRET,
     { expiresIn: '7d' }
   );
 
@@ -44,7 +41,7 @@ export const clearTokenCookies = (res) => {
 
 export const verifyAccessToken = (token) => {
   try {
-    return jwt.verify(token, ACCESS_SECRET);
+    return jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
     return null;
   }
@@ -52,7 +49,7 @@ export const verifyAccessToken = (token) => {
 
 export const verifyRefreshToken = (token) => {
   try {
-    return jwt.verify(token, REFRESH_SECRET);
+    return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
   } catch (error) {
     return null;
   }

@@ -1,132 +1,42 @@
 import fs from 'fs';
 import path from 'path';
-import os from 'os';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const DATA_DIR = path.join(__dirname, '../data/collections');
 
-// Persistent global memory store for Vercel Serverless environment
-if (!global.__DEVSTORE_MEM_DB__) {
-  global.__DEVSTORE_MEM_DB__ = {};
+// Ensure collection directory exists
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
 }
-
-// Helper to pre-load default JSON files into global.__DEVSTORE_MEM_DB__ if empty
-const loadInitialSeedData = (colName) => {
-  const colLower = colName.toLowerCase();
-  const colCap = colLower.charAt(0).toUpperCase() + colLower.slice(1);
-  if (global.__DEVSTORE_MEM_DB__[colLower] && global.__DEVSTORE_MEM_DB__[colLower].length > 0) {
-    return global.__DEVSTORE_MEM_DB__[colLower];
-  }
-
-  const seedCandidates = [
-    path.join(process.cwd(), 'server/data/collections', `${colLower}.json`),
-    path.join(process.cwd(), 'server/data/collections', `${colCap}.json`),
-    path.join(process.cwd(), 'data/collections', `${colLower}.json`),
-    path.join(process.cwd(), 'data/collections', `${colCap}.json`),
-    path.join(__dirname, '../data/collections', `${colLower}.json`),
-    path.join(__dirname, '../data/collections', `${colCap}.json`)
-  ];
-
-  for (const seedPath of seedCandidates) {
-    if (fs.existsSync(seedPath)) {
-      try {
-        const content = fs.readFileSync(seedPath, 'utf-8');
-        const parsed = JSON.parse(content || '[]');
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          global.__DEVSTORE_MEM_DB__[colLower] = parsed;
-          return parsed;
-        }
-      } catch (e) {
-        console.warn(`Error loading seed dataset for ${colLower}:`, e.message);
-      }
-    }
-  }
-
-  if (!global.__DEVSTORE_MEM_DB__[colLower]) {
-    global.__DEVSTORE_MEM_DB__[colLower] = [];
-  }
-  return global.__DEVSTORE_MEM_DB__[colLower];
-};
-
-// Dynamic storage directory resolver for local development
-const getStorageDir = () => {
-  const localCandidates = [
-    path.join(process.cwd(), 'server/data/collections'),
-    path.join(process.cwd(), 'data/collections'),
-    path.join(__dirname, '../data/collections')
-  ];
-  for (const dir of localCandidates) {
-    if (fs.existsSync(dir)) return dir;
-  }
-  return localCandidates[0];
-};
-
-const isVercel = Boolean(process.env.VERCEL);
-
-// In-memory fallback cache for local execution
-const memoryStore = new Map();
 
 class JsonCollection {
   constructor(collectionName) {
+    this.filePath = path.join(DATA_DIR, `${collectionName.toLowerCase()}.json`);
     this.name = collectionName;
   }
 
-  getFilePath() {
-    const dir = getStorageDir();
-    return path.join(dir, `${this.name.toLowerCase()}.json`);
-  }
-
   _read() {
-    const colLower = this.name.toLowerCase();
-
-    // On Vercel: Pure In-Memory DB Mode using global.__DEVSTORE_MEM_DB__
-    if (isVercel) {
-      if (!global.__DEVSTORE_MEM_DB__[colLower] || global.__DEVSTORE_MEM_DB__[colLower].length === 0) {
-        loadInitialSeedData(colLower);
-      }
-      return global.__DEVSTORE_MEM_DB__[colLower] || [];
+    if (!fs.existsSync(this.filePath)) {
+      this._write([]);
+      return [];
     }
-
-    // Local execution: Read from disk
-    const filePath = this.getFilePath();
-    if (!fs.existsSync(filePath)) {
-      return memoryStore.get(colLower) || [];
-    }
-
     try {
-      const content = fs.readFileSync(filePath, 'utf-8');
-      const parsed = JSON.parse(content || '[]');
-      memoryStore.set(colLower, parsed);
-      return parsed;
+      const content = fs.readFileSync(this.filePath, 'utf-8');
+      return JSON.parse(content || '[]');
     } catch (err) {
-      console.error(`Error reading database file: ${filePath}`, err);
-      return memoryStore.get(colLower) || [];
+      console.error(`Error reading database file: ${this.filePath}`, err);
+      return [];
     }
   }
 
   _write(data) {
-    const colLower = this.name.toLowerCase();
-
-    // On Vercel: Mutate global memory DB directly in memory (zero disk writes)
-    if (isVercel) {
-      global.__DEVSTORE_MEM_DB__[colLower] = data;
-      memoryStore.set(colLower, data);
-      return;
-    }
-
-    // Local execution: Write to disk as usual
-    memoryStore.set(colLower, data);
-    const dir = getStorageDir();
-    const filePath = path.join(dir, `${colLower}.json`);
     try {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-      fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+      fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2), 'utf-8');
     } catch (err) {
-      console.warn(`Filesystem write notice for ${this.name}:`, err.message);
+      console.error(`Error writing database file: ${this.filePath}`, err);
     }
   }
 

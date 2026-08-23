@@ -20,45 +20,25 @@ export const register = async (req, res, next) => {
     const cleanUsername = username ? username.trim() : '';
 
     if (!cleanEmail || !password) {
-      return res.status(400).json({ success: false, message: 'Email and password are required.' });
-    }
-
-    // Safe reCAPTCHA bypass guard for serverless/development environments
-    const captchaToken = req.body.recaptchaToken || req.body.captchaToken || req.body['g-recaptcha-response'];
-    if (captchaToken && !process.env.VERCEL && process.env.RECAPTCHA_SECRET_KEY) {
-      try {
-        const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captchaToken}`;
-        const captchaRes = await fetch(verifyUrl, { method: 'POST' });
-        const captchaData = await captchaRes.json();
-        if (!captchaData.success) {
-          console.warn('reCAPTCHA validation failed, proceeding with fallback.');
-        }
-      } catch (e) {
-        console.warn('reCAPTCHA verification notice:', e.message);
-      }
+      return res.status(400).json({ message: 'Email and password are required.' });
     }
 
     // Check if user already exists
     const emailExists = await User.findOne({ email: cleanEmail });
     if (emailExists) {
-      return res.status(400).json({ success: false, message: 'User with this email already exists' });
+      return res.status(400).json({ message: 'Email is already registered.' });
     }
 
     if (cleanUsername) {
       const usernameExists = await User.findOne({ username: cleanUsername });
       if (usernameExists) {
-        return res.status(400).json({ success: false, message: 'Username is already taken.' });
+        return res.status(400).json({ message: 'Username is already taken.' });
       }
     }
 
-    // Hash password with pure JS bcryptjs fallback
-    let hashedPassword = password;
-    try {
-      const salt = await bcrypt.genSalt(10);
-      hashedPassword = await bcrypt.hash(password, salt);
-    } catch (e) {
-      console.warn('Password hashing fallback notice:', e.message);
-    }
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     // Generate 6 digit numeric OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -67,7 +47,7 @@ export const register = async (req, res, next) => {
     // Determine initial role
     const assignedRole = (role === 'admin' || cleanEmail.includes('admin')) ? 'admin' : (role || 'user');
 
-    // Create user in dynamic memory / jsonDb.js / Mongo
+    // Create user in jsonDb.js / Mongo
     const newUser = await User.create({
       name: name || cleanUsername || 'Dev User',
       username: cleanUsername || cleanEmail.split('@')[0],
@@ -80,54 +60,40 @@ export const register = async (req, res, next) => {
       verified: true
     });
 
-    // Generate initial tokens with fallback
-    let accessToken = 'access_token_' + Date.now();
-    let refreshToken = 'refresh_token_' + Date.now();
-    try {
-      const tokens = generateTokens(newUser);
-      accessToken = tokens.accessToken;
-      refreshToken = tokens.refreshToken;
-    } catch (e) {
-      console.warn('Token generation fallback notice:', e.message);
-    }
+    // Generate initial tokens
+    const { accessToken, refreshToken } = generateTokens(newUser);
 
     // Save refresh token to DB
-    try {
-      await RefreshToken.create({
-        userId: (newUser._id || newUser.id || '').toString(),
-        token: refreshToken,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-      });
-    } catch (e) {}
+    await RefreshToken.create({
+      userId: newUser._id.toString(),
+      token: refreshToken,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    });
 
-    // Set Cookies safely
-    try { setTokenCookies(res, accessToken, refreshToken); } catch (e) {}
+    // Set Cookies
+    setTokenCookies(res, accessToken, refreshToken);
 
     // Add first notification
-    try {
-      await Notification.create({
-        userId: (newUser._id || newUser.id || '').toString(),
-        title: 'Welcome to DevStore!',
-        message: 'Thank you for signing up. Your account is active.',
-        type: 'system'
-      });
-    } catch (e) {}
+    await Notification.create({
+      userId: newUser._id.toString(),
+      title: 'Welcome to DevStore!',
+      message: 'Thank you for signing up. Your account is active.',
+      type: 'system'
+    });
 
     // Remove password from local user object before sending response
     const userResponse = { ...newUser };
     delete userResponse.password;
     if (!userResponse.role) userResponse.role = assignedRole;
 
-    return res.status(201).json({
-      success: true,
-      message: 'Signed up successfully',
+    res.status(201).json({
+      message: 'Account created successfully.',
       token: accessToken,
       accessToken,
       user: userResponse
     });
   } catch (error) {
-    console.error('Registration Vercel Error:', error);
-    return res.status(500).json({ success: false, message: error.message || 'Registration failed' });
+    next(error);
   }
 };
 
@@ -150,14 +116,9 @@ export const login = async (req, res, next) => {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    // Verify Password with fallback
-    let isMatched = false;
-    try {
-      isMatched = await bcrypt.compare(password, user.password);
-    } catch (e) {
-      isMatched = (user.password === password);
-    }
-    if (!isMatched && user.password !== password) {
+    // Verify Password
+    const isMatched = await bcrypt.compare(password, user.password);
+    if (!isMatched) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
@@ -165,42 +126,40 @@ export const login = async (req, res, next) => {
       user.role = cleanEmail.includes('admin') ? 'admin' : (user.role || 'user');
     }
 
-    // Generate Tokens with fallback
-    let accessToken = 'access_token_' + Date.now();
-    let refreshToken = 'refresh_token_' + Date.now();
-    try {
-      const tokens = generateTokens(user);
-      accessToken = tokens.accessToken;
-      refreshToken = tokens.refreshToken;
-    } catch (e) {
-      console.warn('Login token fallback notice:', e.message);
-    }
+    // Track login history details
+    const device = req.headers['user-agent'] || 'Unknown Device';
+    const ip = req.ip || 'Unknown IP';
+    
+    const history = [...(user.loginHistory || [])];
+    history.push({ device, ip, loginAt: new Date() });
+    if (history.length > 10) history.shift();
 
-    // Save refresh token safely
-    try {
-      await RefreshToken.create({
-        userId: (user._id || user.id || '').toString(),
-        token: refreshToken,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-      });
-    } catch (e) {}
+    await User.findByIdAndUpdate(user._id, { loginHistory: history });
+
+    // Generate Tokens
+    const { accessToken, refreshToken } = generateTokens(user);
+
+    // Save refresh token
+    await RefreshToken.create({
+      userId: user._id.toString(),
+      token: refreshToken,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    });
 
     // Set Cookies
-    try { setTokenCookies(res, accessToken, refreshToken); } catch (e) {}
+    setTokenCookies(res, accessToken, refreshToken);
 
     const userResponse = { ...user };
     delete userResponse.password;
 
-    return res.status(200).json({
-      success: true,
+    res.status(200).json({
       message: 'Logged in successfully.',
       token: accessToken,
       accessToken,
       user: userResponse
     });
   } catch (error) {
-    console.error('Login Error:', error);
-    return res.status(500).json({ message: error.message || 'Login failed.' });
+    next(error);
   }
 };
 
