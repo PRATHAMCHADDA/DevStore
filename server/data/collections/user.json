@@ -63,5 +63,19 @@
         "loginAt": "2026-08-23T06:29:28.508Z"
       }
     ]
+  },
+  {
+    "_id": "04faf76e-ee42-446f-b2d3-4670b6548e25",
+    "createdAt": "2026-08-23T12:54:20.455Z",
+    "updatedAt": "2026-08-23T12:54:20.455Z",
+    "name": "JWT Test User",
+    "username": "jwtuser_0354",
+    "email": "jwt_test_1787489660354@devstore.com",
+    "phone": "",
+    "password": "$2a$10$T0bGDy3FCx4A7R1MA0xY1ezZPq.QOwJHOKG0Iz4vOYoUV4gBwxszi",
+    "role": "user",
+    "otp": "979580",
+    "otpExpiry": "2026-08-23T13:04:20.454Z",
+    "verified": true
   }
 ]
