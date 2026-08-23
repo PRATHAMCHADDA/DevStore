@@ -7,50 +7,50 @@ import { v4 as uuidv4 } from 'uuid';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Candidate source directories for dataset JSON files
-const getSourceDataDir = () => {
-  const candidates = [
+// Dynamic storage directory resolver
+const getStorageDir = () => {
+  if (process.env.VERCEL) {
+    const tmpDir = '/tmp/devstore_collections';
+    if (!fs.existsSync(tmpDir)) {
+      try { fs.mkdirSync(tmpDir, { recursive: true }); } catch (e) {}
+    }
+    return tmpDir;
+  }
+  const localCandidates = [
     path.join(process.cwd(), 'server/data/collections'),
     path.join(process.cwd(), 'data/collections'),
     path.join(__dirname, '../data/collections')
   ];
-  for (const dir of candidates) {
+  for (const dir of localCandidates) {
     if (fs.existsSync(dir)) return dir;
   }
-  return candidates[0];
+  return localCandidates[0];
 };
 
-const LOCAL_DATA_DIR = getSourceDataDir();
-const TMP_DATA_DIR = path.join(os.tmpdir(), 'devstore_collections');
-
 const isVercel = Boolean(process.env.VERCEL);
-const DATA_DIR = isVercel ? TMP_DATA_DIR : LOCAL_DATA_DIR;
 
 // In-memory fallback cache
 const memoryStore = new Map();
 
-// Ensure collection directory exists
-try {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-} catch (e) {
-  console.warn('Notice: Read-only filesystem detected for jsonDb, relying on memory cache fallback.');
-}
-
 class JsonCollection {
   constructor(collectionName) {
-    this.filePath = path.join(DATA_DIR, `${collectionName.toLowerCase()}.json`);
     this.name = collectionName;
+  }
+
+  getFilePath() {
+    const dir = getStorageDir();
+    return path.join(dir, `${this.name.toLowerCase()}.json`);
   }
 
   _read() {
     const colLower = this.name.toLowerCase();
     const colCap = colLower.charAt(0).toUpperCase() + colLower.slice(1);
+    const filePath = this.getFilePath();
 
     // In Vercel environment, ensure /tmp file is seeded from default collection JSON if missing or empty
     if (isVercel) {
-      const tmpFilePath = path.join(TMP_DATA_DIR, `${colLower}.json`);
+      const tmpDir = getStorageDir();
+      const tmpFilePath = path.join(tmpDir, `${colLower}.json`);
       let shouldSeed = !fs.existsSync(tmpFilePath);
       if (!shouldSeed) {
         try {
@@ -76,8 +76,8 @@ class JsonCollection {
             try {
               const content = fs.readFileSync(seedPath, 'utf-8');
               if (content && content.trim().length > 2) {
-                if (!fs.existsSync(TMP_DATA_DIR)) {
-                  fs.mkdirSync(TMP_DATA_DIR, { recursive: true });
+                if (!fs.existsSync(tmpDir)) {
+                  fs.mkdirSync(tmpDir, { recursive: true });
                 }
                 fs.writeFileSync(tmpFilePath, content, 'utf-8');
                 console.log(`✅ Auto-seeded Vercel /tmp for ${colLower} from ${seedPath}`);
@@ -91,29 +91,34 @@ class JsonCollection {
       }
     }
 
-    if (!fs.existsSync(this.filePath)) {
+    if (!fs.existsSync(filePath)) {
       return memoryStore.get(colLower) || memoryStore.get(this.name) || [];
     }
 
     try {
-      const content = fs.readFileSync(this.filePath, 'utf-8');
+      const content = fs.readFileSync(filePath, 'utf-8');
       const parsed = JSON.parse(content || '[]');
       memoryStore.set(colLower, parsed);
       memoryStore.set(this.name, parsed);
       return parsed;
     } catch (err) {
-      console.error(`Error reading database file: ${this.filePath}`, err);
+      console.error(`Error reading database file: ${filePath}`, err);
       return memoryStore.get(colLower) || memoryStore.get(this.name) || [];
     }
   }
 
   _write(data) {
+    const colLower = this.name.toLowerCase();
+    memoryStore.set(colLower, data);
     memoryStore.set(this.name, data);
+
+    const dir = getStorageDir();
+    const filePath = path.join(dir, `${colLower}.json`);
     try {
-      if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
       }
-      fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2), 'utf-8');
+      fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
     } catch (err) {
       console.warn(`Filesystem write notice for ${this.name} (using memory state):`, err.message);
     }

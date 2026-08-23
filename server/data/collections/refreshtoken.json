@@ -606,5 +606,13 @@
     "userId": "admin-super-id-001",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluLXN1cGVyLWlkLTAwMSIsImlhdCI6MTc4NzQyNTEwNCwiZXhwIjoxNzg4MDI5OTA0fQ.0yJPpIetK1MfbOjSvUfTfFcjbDYGOVqx7o9B7jvEi4I",
     "expiresAt": "2026-08-29T18:58:24.366Z"
+  },
+  {
+    "_id": "7cd00736-cfb6-4ef4-a317-857d52c4bcc2",
+    "createdAt": "2026-08-23T05:44:30.129Z",
+    "updatedAt": "2026-08-23T05:44:30.129Z",
+    "userId": "1559083d-7a9e-42db-87f9-d10035a9f468",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1NTkwODNkLTdhOWUtNDJkYi04N2Y5LWQxMDAzNWE5ZjQ2OCIsImlhdCI6MTc4NzQ2Mzg3MCwiZXhwIjoxNzg4MDY4NjcwfQ.d8MT04BnC-WEnSi2MNTZL2qscAp8Q8Z1u_IpPrYNGIE",
+    "expiresAt": "2026-08-30T05:44:30.129Z"
   }
 ]

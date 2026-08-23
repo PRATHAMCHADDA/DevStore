@@ -83,5 +83,19 @@
         "loginAt": "2026-08-22T18:57:50.335Z"
       }
     ]
+  },
+  {
+    "_id": "1559083d-7a9e-42db-87f9-d10035a9f468",
+    "createdAt": "2026-08-23T05:44:30.128Z",
+    "updatedAt": "2026-08-23T05:44:30.128Z",
+    "name": "Test Serverless User",
+    "username": "testuser_1787463870035",
+    "email": "testuser_1787463870035@devstore.com",
+    "phone": "",
+    "password": "$2a$10$z3AQDQRCqA5rAnQ4etvhn.DxGVi7yUYs4E77QJ3A63.swWqGxeLSO",
+    "role": "user",
+    "otp": "380438",
+    "otpExpiry": "2026-08-23T05:54:30.128Z",
+    "verified": true
   }
 ]

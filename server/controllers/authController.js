@@ -93,7 +93,8 @@ export const register = async (req, res, next) => {
       user: userResponse
     });
   } catch (error) {
-    next(error);
+    console.error('Registration Error:', error);
+    res.status(500).json({ message: error.message || 'Registration failed.' });
   }
 };
 

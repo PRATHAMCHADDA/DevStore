@@ -835,5 +835,14 @@
     "title": "New Order Received",
     "message": "Order #DEV-193990 has been placed by user for $4364.25.",
     "type": "order"
+  },
+  {
+    "_id": "519a251d-56fb-41dd-9ab9-c4a2e95da3b8",
+    "createdAt": "2026-08-23T05:44:30.130Z",
+    "updatedAt": "2026-08-23T05:44:30.130Z",
+    "userId": "1559083d-7a9e-42db-87f9-d10035a9f468",
+    "title": "Welcome to DevStore!",
+    "message": "Thank you for signing up. Your account is active.",
+    "type": "system"
   }
 ]
