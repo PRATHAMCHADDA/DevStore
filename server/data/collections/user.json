@@ -2,7 +2,7 @@
   {
     "_id": "admin-super-id-001",
     "createdAt": "2026-08-22T18:32:48.114Z",
-    "updatedAt": "2026-08-23T05:03:23.197Z",
+    "updatedAt": "2026-08-23T05:54:04.583Z",
     "name": "Super Admin",
     "username": "admin",
     "email": "admin@devstore.com",
@@ -11,11 +11,6 @@
     "role": "admin",
     "verified": true,
     "loginHistory": [
-      {
-        "device": "node",
-        "ip": "::1",
-        "loginAt": "2026-08-22T18:32:59.662Z"
-      },
       {
         "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
         "ip": "::1",
@@ -60,6 +55,11 @@
         "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
         "ip": "::1",
         "loginAt": "2026-08-23T05:03:23.194Z"
+      },
+      {
+        "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+        "ip": "::1",
+        "loginAt": "2026-08-23T05:54:04.581Z"
       }
     ]
   },

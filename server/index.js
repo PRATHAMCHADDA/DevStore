@@ -40,12 +40,12 @@ app.use(helmet({
   crossOriginResourcePolicy: false // Allows loading local uploads in development
 }));
 
-// Dynamic Serverless CORS & Preflight Configuration
+// Express Serverless CORS Policy
 app.use(cors({
   origin: true,
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 app.options('*', cors());
 
