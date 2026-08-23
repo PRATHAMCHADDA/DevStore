@@ -71,7 +71,7 @@
   {
     "_id": "0947fd63-b786-49f2-849a-3059af503f3d",
     "createdAt": "2026-07-20T06:03:01.561Z",
-    "updatedAt": "2026-07-20T06:03:01.561Z",
+    "updatedAt": "2026-08-22T19:38:22.207Z",
     "name": "Asus ROG Zephyrus G14 Gaming Laptop",
     "slug": "asus-rog-zephyrus-g14-gaming",
     "description": "Dynamic performance in an ultraportable 14\" package. Packing the AMD Ryzen 9 processor and NVIDIA GeForce RTX 4070, a gorgeous 120Hz OLED Nebula display, and custom ROG intelligent cooling configurations.",
@@ -83,7 +83,7 @@
     ],
     "category": "Computers",
     "brand": "Asus",
-    "stock": 9,
+    "stock": 15,
     "ratings": 4.6,
     "reviewsCount": 15,
     "isFeatured": true,
